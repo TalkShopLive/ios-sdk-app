@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6791450E2B62DDCF00B597D2 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 6791450D2B62DDCF00B597D2 /* tsl-ios-sdk */; };
+		679145112B62DE4800B597D2 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 679145102B62DE4800B597D2 /* tsl-ios-sdk */; };
+		67ECAA8A2B639480000961B5 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 67ECAA892B639480000961B5 /* tsl-ios-sdk */; };
 		D17DA7762B5F10FD00ED9BBF /* TSL_SDKApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7752B5F10FD00ED9BBF /* TSL_SDKApp.swift */; };
 		D17DA7782B5F10FD00ED9BBF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7772B5F10FD00ED9BBF /* ContentView.swift */; };
 		D17DA77A2B5F10FE00ED9BBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D17DA7792B5F10FE00ED9BBF /* Assets.xcassets */; };
@@ -51,6 +54,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67ECAA8A2B639480000961B5 /* tsl-ios-sdk in Frameworks */,
+				6791450E2B62DDCF00B597D2 /* tsl-ios-sdk in Frameworks */,
+				679145112B62DE4800B597D2 /* tsl-ios-sdk in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +77,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6723152F2B623CB10052D39A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D17DA7692B5F10FD00ED9BBF = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +91,7 @@
 				D17DA7852B5F10FE00ED9BBF /* TSL SDKTests */,
 				D17DA78F2B5F10FE00ED9BBF /* TSL SDKUITests */,
 				D17DA7732B5F10FD00ED9BBF /* Products */,
+				6723152F2B623CB10052D39A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -143,6 +157,11 @@
 			dependencies = (
 			);
 			name = "TSL SDK";
+			packageProductDependencies = (
+				6791450D2B62DDCF00B597D2 /* tsl-ios-sdk */,
+				679145102B62DE4800B597D2 /* tsl-ios-sdk */,
+				67ECAA892B639480000961B5 /* tsl-ios-sdk */,
+			);
 			productName = "TSL SDK";
 			productReference = D17DA7722B5F10FD00ED9BBF /* TSL SDK.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +234,9 @@
 				Base,
 			);
 			mainGroup = D17DA7692B5F10FD00ED9BBF;
+			packageReferences = (
+				67ECAA882B639480000961B5 /* XCLocalSwiftPackageReference "../ios-sdk" */,
+			);
 			productRefGroup = D17DA7732B5F10FD00ED9BBF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -354,6 +376,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -410,6 +433,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_INCLUDE_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -419,25 +443,31 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TSL SDK/Preview Content\"";
-				DEVELOPMENT_TEAM = R4WACU9V9E;
+				DEVELOPMENT_TEAM = 79Y4JVB3X2;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "live.talkshopsdk.TSL-SDK";
+				PRODUCT_BUNDLE_IDENTIFIER = live.talkshoplive.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -448,25 +478,31 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TSL SDK/Preview Content\"";
-				DEVELOPMENT_TEAM = R4WACU9V9E;
+				DEVELOPMENT_TEAM = 79Y4JVB3X2;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "live.talkshopsdk.TSL-SDK";
+				PRODUCT_BUNDLE_IDENTIFIER = live.talkshoplive.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -479,13 +515,14 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4WACU9V9E;
+				DEVELOPMENT_TEAM = Z7T22T8T9B;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "live.talkshopsdk.TSL-SDKTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TSL SDK.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TSL SDK";
@@ -499,13 +536,14 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4WACU9V9E;
+				DEVELOPMENT_TEAM = Z7T22T8T9B;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "live.talkshopsdk.TSL-SDKTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TSL SDK.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TSL SDK";
@@ -518,12 +556,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4WACU9V9E;
+				DEVELOPMENT_TEAM = Z7T22T8T9B;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "live.talkshopsdk.TSL-SDKUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "TSL SDK";
@@ -536,12 +575,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4WACU9V9E;
+				DEVELOPMENT_TEAM = Z7T22T8T9B;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "live.talkshopsdk.TSL-SDKUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "TSL SDK";
@@ -588,6 +628,28 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		67ECAA882B639480000961B5 /* XCLocalSwiftPackageReference "../ios-sdk" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../ios-sdk";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6791450D2B62DDCF00B597D2 /* tsl-ios-sdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "tsl-ios-sdk";
+		};
+		679145102B62DE4800B597D2 /* tsl-ios-sdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "tsl-ios-sdk";
+		};
+		67ECAA892B639480000961B5 /* tsl-ios-sdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "tsl-ios-sdk";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D17DA76A2B5F10FD00ED9BBF /* Project object */;
 }
