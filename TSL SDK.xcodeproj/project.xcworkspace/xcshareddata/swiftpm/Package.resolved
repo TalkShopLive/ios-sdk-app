@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pubnub/swift.git",
+      "state" : {
+        "revision" : "649a9e93f7744c0961706a7f8781b138707a55ed",
+        "version" : "6.3.0"
+      }
+    }
+  ],
+  "version" : 2
+}
