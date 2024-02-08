@@ -44,16 +44,8 @@ struct ContentView: View {
             .background(Color.blue)
             .cornerRadius(8)
             
-            Button("Get Closed Captions Using ShowID") {
-                fetchClosedCaptionsUsingShowId()
-            }
-            .padding()
-            .foregroundColor(.white)
-            .background(Color.blue)
-            .cornerRadius(8)
-            
-            Button("Get Closed Captions Using EventID") {
-                fetchClosedCaptionsUsingEventId()
+            Button("Fetch Closed Captions") {
+                fetchClosedCaptions()
             }
             .padding()
             .foregroundColor(.white)
@@ -103,39 +95,10 @@ struct ContentView: View {
         }
     }
     
-    func fetchClosedCaptionsUsingEventId() {
-        // Replace the API URL with your actual API endpoint
-        let showInstance = tsl_ios_sdk.Show()
-        
-        showInstance.getClosedCaptions(eventId: self.showObject?.currentEvent?.id) { result in
-            switch result {
-            case .success(let fileName):
-                // Access properties of TSLShow directly
-                self.showResult = fileName
-            case .failure(let error):
-                // Handle error case
-                self.showResult = "Error: \(error.localizedDescription)"
-            }
-        }
+    func fetchClosedCaptions() {
+        self.showResult = "File Name: \n\n" + (self.showObject?.cc ?? "")
     }
-    
-    func fetchClosedCaptionsUsingShowId() {
-        // Replace the API URL with your actual API endpoint
-        self.showResult = showID
-        let showInstance = tsl_ios_sdk.Show.shared
-        
-        showInstance.getClosedCaptions(showId: self.showObject?.productKey) { result in
-            switch result {
-            case .success(let fileName):
-                // Access properties of TSLShow directly
-                self.showResult = fileName
-            case .failure(let error):
-                // Handle error case
-                self.showResult = "Error: \(error.localizedDescription)"
-            }
-        }
-    }
-    
+
     
 }
 
