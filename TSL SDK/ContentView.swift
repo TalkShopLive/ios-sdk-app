@@ -9,7 +9,7 @@ import tsl_ios_sdk
 
 struct ContentView: View {
     @State private var idInput: String = ""
-    @State private var apiResult: String = ""
+    @State private var showResult: String = ""
     
     var body: some View {
         VStack {
@@ -17,8 +17,8 @@ struct ContentView: View {
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .onAppear {
-                        // Set the initial value for idInput
-                        idInput = "vzzg6tNu0qOv"
+                    // Set the initial value for idInput
+                    idInput = "vzzg6tNu0qOv"
                 }
             
             Button("Fetch Data") {
@@ -29,7 +29,7 @@ struct ContentView: View {
             .background(Color.blue)
             .cornerRadius(8)
             
-            Text(apiResult)
+            Text(showResult)
                 .padding()
         }
         .padding()
@@ -37,27 +37,20 @@ struct ContentView: View {
     
     func fetchShowData() {
         // Replace the API URL with your actual API endpoint
-        self.apiResult = idInput
-        let tslSDK = TSLSDK.shared
-        var showDetails : TSLShow?
-        tslSDK.getShows(productKey: "vzzg6tNu0qOv") { result in
+        self.showResult = idInput
+        let showInstance = tsl_ios_sdk.Show()
+        let showId = "vzzg6tNu0qOv"
+        showInstance.getDetails(showId: showId) { result in
             switch result {
-                case .success(let show):
-                    showDetails = show
-                    // Access properties of TSLShow directly
-                self.apiResult = showDetails?.name ?? ""
-                case .failure(let error):
-                    // Handle error case
-                    print("Error: \(error.localizedDescription)")
-                }
+            case .success(let show):
+                // Access properties of TSLShow directly
+                self.showResult = show.name ?? ""
+            case .failure(let error):
+                // Handle error case
+                self.showResult = "Error: \(error.localizedDescription)"
+            }
         }
-
     }
-}
-
-struct YourDecodableModel: Decodable {
-    // Define your model properties based on the API response
-    let property: String
 }
 
 struct ContentView_Previews: PreviewProvider {
