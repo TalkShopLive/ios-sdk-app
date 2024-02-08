@@ -12,9 +12,11 @@ struct ContentView: View {
     @State private var showResult: String = ""
     @State private var eventResult: String = ""
     @State private var eventInput: String = ""
+    @State private var showObject : tsl_ios_sdk.ShowData? = nil
     
     var showID = "vzzg6tNu0qOv"
     var eventID = "8WtAFFgRO1K0"
+    
 
     var body: some View {
         VStack {
@@ -26,8 +28,32 @@ struct ContentView: View {
                     showInput = showID
                 }
             
-            Button("Fetch Data") {
+            Button("Fetch Shows") {
                 fetchShowData()
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(8)
+            
+            Button("Fetch Current Event") {
+                fetchCurrentEvent()
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(8)
+            
+            Button("Get Closed Captions Using ShowID") {
+                fetchClosedCaptionsUsingShowId()
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(8)
+            
+            Button("Get Closed Captions Using EventID") {
+                fetchClosedCaptionsUsingEventId()
             }
             .padding()
             .foregroundColor(.white)
@@ -39,27 +65,6 @@ struct ContentView: View {
         }
         .padding()
         
-        VStack {
-            TextField("Enter Event ID", text: $eventInput)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .onAppear {
-                        // Set the initial value for idInput
-                        eventInput = eventID
-                }
-            
-            Button("Fetch Event Data") {
-                fetchCurrentEvent()
-            }
-            .padding()
-            .foregroundColor(.white)
-            .background(Color.blue)
-            .cornerRadius(8)
-            
-            Text(eventResult)
-                .padding()
-        }
-        .padding()
     }
     
     func fetchShowData() {
@@ -70,6 +75,7 @@ struct ContentView: View {
             switch result {
             case .success(let show):
                 // Access properties of TSLShow directly
+                self.showObject = show
                 self.showResult = "Show Name: " + (show.name ?? "")
             case .failure(let error):
                 // Handle error case
@@ -80,21 +86,57 @@ struct ContentView: View {
     
     func fetchCurrentEvent() {
         // Replace the API URL with your actual API endpoint
-        self.eventResult = eventInput
+        self.showResult = eventInput
+        self.showInput = eventID
         let showInstance = tsl_ios_sdk.Show()
         let showId = eventID
         showInstance.getStatus(showId: showId) { result in
             switch result {
                 case .success(let show):
                     // Access properties of TSLShow directly
-                self.eventResult = "Event Name: " + (show.name ?? "")
+                self.showResult = "Event Name: " + (show.name ?? "")
                 case .failure(let error):
                     // Handle error case
-                self.eventResult = "Error: \(error.localizedDescription)"
+                self.showResult = "Error: \(error.localizedDescription)"
 
                 }
         }
     }
+    
+    func fetchClosedCaptionsUsingEventId() {
+        // Replace the API URL with your actual API endpoint
+        let showInstance = tsl_ios_sdk.Show()
+        
+        showInstance.getClosedCaptions(eventId: self.showObject?.currentEvent?.id) { result in
+            switch result {
+            case .success(let fileName):
+                // Access properties of TSLShow directly
+                self.showResult = fileName
+            case .failure(let error):
+                // Handle error case
+                self.showResult = "Error: \(error.localizedDescription)"
+            }
+        }
+    }
+    
+    func fetchClosedCaptionsUsingShowId() {
+        // Replace the API URL with your actual API endpoint
+        self.showResult = showID
+        let showInstance = tsl_ios_sdk.Show.shared
+        
+        showInstance.getClosedCaptions(showId: self.showObject?.productKey) { result in
+            switch result {
+            case .success(let fileName):
+                // Access properties of TSLShow directly
+                self.showResult = fileName
+            case .failure(let error):
+                // Handle error case
+                self.showResult = "Error: \(error.localizedDescription)"
+            }
+        }
+    }
+    
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

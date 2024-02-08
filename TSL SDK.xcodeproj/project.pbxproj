@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6714FDC02B74061300F8A4B0 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 6714FDBF2B74061300F8A4B0 /* tsl-ios-sdk */; };
+		674D54442B6DDE6D00FABE2F /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 674D54432B6DDE6D00FABE2F /* tsl-ios-sdk */; };
 		677C544C2B6B0EF20055A0B7 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 677C544B2B6B0EF20055A0B7 /* tsl-ios-sdk */; };
 		6791450E2B62DDCF00B597D2 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 6791450D2B62DDCF00B597D2 /* tsl-ios-sdk */; };
 		679145112B62DE4800B597D2 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 679145102B62DE4800B597D2 /* tsl-ios-sdk */; };
 		67A128722B69F22A00CB6A3A /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 67A128712B69F22A00CB6A3A /* tsl-ios-sdk */; };
-		67C717C22B6C408C00C2EEB6 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 67C717C12B6C408C00C2EEB6 /* tsl-ios-sdk */; };
 		67ECAA8A2B639480000961B5 /* tsl-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 67ECAA892B639480000961B5 /* tsl-ios-sdk */; };
 		D17DA7762B5F10FD00ED9BBF /* TSL_SDKApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7752B5F10FD00ED9BBF /* TSL_SDKApp.swift */; };
 		D17DA7782B5F10FD00ED9BBF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7772B5F10FD00ED9BBF /* ContentView.swift */; };
@@ -60,7 +61,8 @@
 				67ECAA8A2B639480000961B5 /* tsl-ios-sdk in Frameworks */,
 				67A128722B69F22A00CB6A3A /* tsl-ios-sdk in Frameworks */,
 				6791450E2B62DDCF00B597D2 /* tsl-ios-sdk in Frameworks */,
-				67C717C22B6C408C00C2EEB6 /* tsl-ios-sdk in Frameworks */,
+				674D54442B6DDE6D00FABE2F /* tsl-ios-sdk in Frameworks */,
+				6714FDC02B74061300F8A4B0 /* tsl-ios-sdk in Frameworks */,
 				679145112B62DE4800B597D2 /* tsl-ios-sdk in Frameworks */,
 				677C544C2B6B0EF20055A0B7 /* tsl-ios-sdk in Frameworks */,
 			);
@@ -169,7 +171,8 @@
 				67ECAA892B639480000961B5 /* tsl-ios-sdk */,
 				67A128712B69F22A00CB6A3A /* tsl-ios-sdk */,
 				677C544B2B6B0EF20055A0B7 /* tsl-ios-sdk */,
-				67C717C12B6C408C00C2EEB6 /* tsl-ios-sdk */,
+				674D54432B6DDE6D00FABE2F /* tsl-ios-sdk */,
+				6714FDBF2B74061300F8A4B0 /* tsl-ios-sdk */,
 			);
 			productName = "TSL SDK";
 			productReference = D17DA7722B5F10FD00ED9BBF /* TSL SDK.app */;
@@ -244,7 +247,7 @@
 			);
 			mainGroup = D17DA7692B5F10FD00ED9BBF;
 			packageReferences = (
-				67C717C02B6C408C00C2EEB6 /* XCRemoteSwiftPackageReference "ios-sdk" */,
+				6714FDBE2B74061300F8A4B0 /* XCRemoteSwiftPackageReference "ios-sdk" */,
 			);
 			productRefGroup = D17DA7732B5F10FD00ED9BBF /* Products */;
 			projectDirPath = "";
@@ -643,17 +646,26 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		67C717C02B6C408C00C2EEB6 /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
+		6714FDBE2B74061300F8A4B0 /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
 			requirement = {
 				kind = revision;
-				revision = 537fffbb45588b711f5b3eb07e6ed04592b79656;
+				revision = f85d011769a80010a1bbc47a2281c3951dcdb931;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6714FDBF2B74061300F8A4B0 /* tsl-ios-sdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6714FDBE2B74061300F8A4B0 /* XCRemoteSwiftPackageReference "ios-sdk" */;
+			productName = "tsl-ios-sdk";
+		};
+		674D54432B6DDE6D00FABE2F /* tsl-ios-sdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "tsl-ios-sdk";
+		};
 		677C544B2B6B0EF20055A0B7 /* tsl-ios-sdk */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "tsl-ios-sdk";
@@ -668,11 +680,6 @@
 		};
 		67A128712B69F22A00CB6A3A /* tsl-ios-sdk */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = "tsl-ios-sdk";
-		};
-		67C717C12B6C408C00C2EEB6 /* tsl-ios-sdk */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 67C717C02B6C408C00C2EEB6 /* XCRemoteSwiftPackageReference "ios-sdk" */;
 			productName = "tsl-ios-sdk";
 		};
 		67ECAA892B639480000961B5 /* tsl-ios-sdk */ = {
