@@ -5,14 +5,14 @@
 //  Created by Daman Mehta on 2024-01-22.
 //
 import SwiftUI
-import tsl_ios_sdk
+import Talkshoplive
 
 struct ContentView: View {
     @State private var showInput: String = ""
     @State private var showResult: String = ""
     @State private var eventResult: String = ""
     @State private var eventInput: String = ""
-    @State private var showObject : tsl_ios_sdk.ShowData? = nil
+    @State private var showObject : Talkshoplive.ShowData? = nil
     
     var showID = "vzzg6tNu0qOv"
     var eventID = "8WtAFFgRO1K0"
@@ -73,14 +73,14 @@ struct ContentView: View {
     
     func initializeSDK() {
         // Replace the API URL with your actual API endpoint
-        let TSL = tsl_ios_sdk.TalkShopLive(clientKey: "0GmN76SBDdHRsGLRDcmVzpURj",debugMode: true,testMode: true)
+        let TSL = Talkshoplive.TalkShopLive(clientKey: "0GmN76SBDdHRsGLRDcmVzpURj",debugMode: true,testMode: true)
         print(TSL)
     }
     
     func fetchShowData() {
         // Replace the API URL with your actual API endpoint
         self.showResult = showInput
-        let showInstance = tsl_ios_sdk.Show()
+        let showInstance = Talkshoplive.Show()
         showInstance.getDetails(showId: self.showID) { result in
             switch result {
             case .success(let show):
@@ -98,7 +98,7 @@ struct ContentView: View {
         // Replace the API URL with your actual API endpoint
         self.showResult = eventInput
         self.showInput = eventID
-        let showInstance = tsl_ios_sdk.Show()
+        let showInstance = Talkshoplive.Show()
         let showId = eventID
         showInstance.getStatus(showId: showId) { result in
             switch result {
