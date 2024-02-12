@@ -17,9 +17,19 @@ struct ContentView: View {
     var showID = "vzzg6tNu0qOv"
     var eventID = "8WtAFFgRO1K0"
     
-
+    
     var body: some View {
         VStack {
+            
+            Button("Initialize SDK") {
+                initializeSDK()
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(8)
+            
+            
             TextField("Enter ID", text: $showInput)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -52,11 +62,19 @@ struct ContentView: View {
             .background(Color.blue)
             .cornerRadius(8)
             
+            
+            
             Text(showResult)
                 .padding()
         }
         .padding()
         
+    }
+    
+    func initializeSDK() {
+        // Replace the API URL with your actual API endpoint
+        let TSL = tsl_ios_sdk.TalkShopLive(clientKey: "0GmN76SBDdHRsGLRDcmVzpURj",debugMode: true,testMode: true)
+        print(TSL)
     }
     
     func fetchShowData() {
@@ -84,21 +102,21 @@ struct ContentView: View {
         let showId = eventID
         showInstance.getStatus(showId: showId) { result in
             switch result {
-                case .success(let show):
-                    // Access properties of TSLShow directly
+            case .success(let show):
+                // Access properties of TSLShow directly
                 self.showResult = "Event Name: " + (show.name ?? "")
-                case .failure(let error):
-                    // Handle error case
+            case .failure(let error):
+                // Handle error case
                 self.showResult = "Error: \(error.localizedDescription)"
-
-                }
+                
+            }
         }
     }
     
     func fetchClosedCaptions() {
-        self.showResult = "File Name: \n\n" + (self.showObject?.cc ?? "")
+        self.showResult = "File Name: \n\n" + (self.showObject?.cc ?? "Closed captions file not available")
     }
-
+    
     
 }
 

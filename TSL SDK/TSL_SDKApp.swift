@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import tsl_ios_sdk
 
 @main
 struct TSL_SDKApp: App {
