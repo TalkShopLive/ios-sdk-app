@@ -17,7 +17,6 @@ struct ContentView: View {
     var showID = "vzzg6tNu0qOv"
     var eventID = "8WtAFFgRO1K0"
     
-    
     var body: some View {
         VStack {
             
@@ -62,6 +61,22 @@ struct ContentView: View {
             .background(Color.blue)
             .cornerRadius(8)
             
+            Button("Create Messaging Token - Guest") {
+                createTokenGuestUser()
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(8)
+            
+            Button("Create Messaging Token - Fedarated User") {
+                createTokenFedaratedUser()
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(8)
+            
             
             
             Text(showResult)
@@ -73,8 +88,23 @@ struct ContentView: View {
     
     func initializeSDK() {
         // Replace the API URL with your actual API endpoint
-        let TSL = Talkshoplive.TalkShopLive(clientKey: "0GmN76SBDdHRsGLRDcmVzpURj",debugMode: true,testMode: true)
+        let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3",debugMode: true,testMode: true)
         print(TSL)
+    }
+    
+    func createTokenGuestUser() {
+        // Replace the API URL with your actual API endpoint
+        let jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3MDg3MjI1MDAsInVzZXIiOnsiaWQiOjEyMywibmFtZSI6Ik1heXVyaSJ9LCJqdGkiOiJ0V2hCQXdTVG1YQzZycldLMTVBdURRPT0ifQ.zGgWSlRrZzMz4KWT6rZ6kUBaKetnrGJEPbcxzs8B_E8"
+        let _ = Talkshoplive.Chat(jwtToken: jwtToken, isGuest: true, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
+    }
+    
+    func createTokenFedaratedUser() {
+        // Replace the API URL with your actual API endpoint
+        
+        let jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3MDg3MjI1MDAsInVzZXIiOnsiaWQiOjEyMywibmFtZSI6Ik1heXVyaSJ9LCJqdGkiOiJ0V2hCQXdTVG1YQzZycldLMTVBdURRPT0ifQ.zGgWSlRrZzMz4KWT6rZ6kUBaKetnrGJEPbcxzs8B_E8"
+        let _ = Talkshoplive.Chat(jwtToken: jwtToken, isGuest:false, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
+    
+        print("Chat Instance")
     }
     
     func fetchShowData() {
