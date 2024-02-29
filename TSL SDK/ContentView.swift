@@ -16,6 +16,8 @@ struct ContentView: View {
     
     var showID = "vzzg6tNu0qOv"
     var eventID = "8WtAFFgRO1K0"
+    @State private var chat: Talkshoplive.Chat? = nil
+
     
     var body: some View {
         VStack {
@@ -69,15 +71,25 @@ struct ContentView: View {
             .background(Color.blue)
             .cornerRadius(8)
             
-            Button("Create Messaging Token - Fedarated User") {
+            Button(action: {
                 createTokenFedaratedUser()
+            }) {
+                Text("Create Messaging Token - Fedarated User")
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(8)
             }
-            .padding()
-            .foregroundColor(.white)
-            .background(Color.blue)
-            .cornerRadius(8)
             
-            
+            Button(action: {
+                sendMessage()
+            }) {
+                Text("Send Message")
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(8)
+            }
             
             Text(showResult)
                 .padding()
@@ -90,21 +102,6 @@ struct ContentView: View {
         // Replace the API URL with your actual API endpoint
         let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3",debugMode: true,testMode: true)
         print(TSL)
-    }
-    
-    func createTokenGuestUser() {
-        // Replace the API URL with your actual API endpoint
-        let jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3MDg3MjI1MDAsInVzZXIiOnsiaWQiOjEyMywibmFtZSI6Ik1heXVyaSJ9LCJqdGkiOiJ0V2hCQXdTVG1YQzZycldLMTVBdURRPT0ifQ.zGgWSlRrZzMz4KWT6rZ6kUBaKetnrGJEPbcxzs8B_E8"
-        let _ = Talkshoplive.Chat(jwtToken: jwtToken, isGuest: true, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
-    }
-    
-    func createTokenFedaratedUser() {
-        // Replace the API URL with your actual API endpoint
-        
-        let jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3MDg3MjI1MDAsInVzZXIiOnsiaWQiOjEyMywibmFtZSI6Ik1heXVyaSJ9LCJqdGkiOiJ0V2hCQXdTVG1YQzZycldLMTVBdURRPT0ifQ.zGgWSlRrZzMz4KWT6rZ6kUBaKetnrGJEPbcxzs8B_E8"
-        let _ = Talkshoplive.Chat(jwtToken: jwtToken, isGuest:false, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
-    
-        print("Chat Instance")
     }
     
     func fetchShowData() {
@@ -145,6 +142,40 @@ struct ContentView: View {
     
     func fetchClosedCaptions() {
         self.showResult = "File Name: \n\n" + (self.showObject?.cc ?? "Closed captions file not available")
+    }
+    
+    func createTokenGuestUser() {
+        let token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3MDkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSJ9.hHFWaQU-8yMCnPTsI7ah5wapjLvwSwo2ZbuQNwPggfU"
+        /*
+         Payload to generate JWT Token for Guest User :
+         {
+           "iss": "sdk_2ea21de19cc8bc5e8640c7b227fef2f3", //SDK Key
+           "exp": 1709267746, // Timeinterval from now to 1 day
+           "jti": "tWhBAwSTmXU6zyQK15Euyy==", // Unique Random string
+         }
+         */
+        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:true, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
+    }
+    
+    func createTokenFedaratedUser() {
+        /*
+         Payload to generate JWT Token for Fedarated User:
+         {
+           "iss": "sdk_2ea21de19cc8bc5e8640c7b227fef2f3", //SDK Key
+           "exp": 1709267746, // Timeinterval from now to 1 day
+           "jti": "tWhBAwSTmXU6zyQK15Euyy==", // Unique Random string
+           "user": {
+             "id": "123",
+             "name": "Mayuri"
+           }
+         }
+         */
+        let token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3MDkzNTQxNDYsImp0aSI6InRXc3NBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.QS99WYjbvh8l4RfN3-NsNz1X7ZGThbBZep3UoM8oSok"
+        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
+    }
+    
+    func sendMessage() {
+        self.chat?.sendMessage(message: "Hey TalkShopLive Here")
     }
     
     
