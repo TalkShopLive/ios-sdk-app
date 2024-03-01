@@ -13,6 +13,8 @@ struct ContentView: View {
     @State private var eventResult: String = ""
     @State private var eventInput: String = ""
     @State private var showObject : Talkshoplive.ShowData? = nil
+    @StateObject private var viewModel = ContentViewModel()
+
     
     var showID = "vzzg6tNu0qOv"
     var eventID = "8WtAFFgRO1K0"
@@ -172,14 +174,24 @@ struct ContentView: View {
          */
         let token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3MDkzNTQxNDYsImp0aSI6InRXc3NBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.QS99WYjbvh8l4RfN3-NsNz1X7ZGThbBZep3UoM8oSok"
         self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
+        self.chat?.delegate = viewModel
     }
     
     func sendMessage() {
         self.chat?.sendMessage(message: "Hey TalkShopLive Here")
+        
     }
-    
-    
 }
+
+class ContentViewModel: ObservableObject, ChatDelegate {
+    @Published var message: String = ""
+
+    func onNewMessage(_ message: String) {
+        self.message = message
+        print("APP : Recieved New Message => ", message)
+    }
+}
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
