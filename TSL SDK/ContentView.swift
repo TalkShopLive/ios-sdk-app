@@ -129,7 +129,7 @@ struct ContentView: View {
         self.showInput = eventID
         let showInstance = Talkshoplive.Show()
         let showId = eventID
-        showInstance.getStatus(showId: showId) { result in
+        showInstance.getStatus(showKey: showId) { result in
             switch result {
             case .success(let show):
                 // Access properties of TSLShow directly
@@ -156,7 +156,7 @@ struct ContentView: View {
            "jti": "tWhBAwSTmXU6zyQK15Euyy==", // Unique Random string
          }
          */
-        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:true, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
+        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:true, showKey: "8WtAFFgRO1K0")
     }
     
     func createTokenFedaratedUser() {
@@ -173,7 +173,7 @@ struct ContentView: View {
          }
          */
         let token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3MDkzNTQxNDYsImp0aSI6InRXc3NBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.QS99WYjbvh8l4RfN3-NsNz1X7ZGThbBZep3UoM8oSok"
-        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: "8WtAFFgRO1K0", mode: "public", refresh: "manual")
+        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: "8WtAFFgRO1K0")
         self.chat?.delegate = viewModel
     }
     
@@ -184,9 +184,9 @@ struct ContentView: View {
 }
 
 class ContentViewModel: ObservableObject, ChatDelegate {
-    @Published var message: String = ""
+    @Published var message: Talkshoplive.MessageData = Talkshoplive.MessageData()
 
-    func onNewMessage(_ message: String) {
+    func onNewMessage(_ message: MessageData) {
         self.message = message
         print("APP : Recieved New Message => ", message)
     }
