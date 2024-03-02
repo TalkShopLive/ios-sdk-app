@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TalkShopLive/ios-sdk",
       "state" : {
-        "branch" : "features/IOS-27-add-pubnub-event-listeners-part1",
-        "revision" : "cb4e4394d2b0811ed92a912cda7d330f2273683a"
+        "revision" : "9abaf1558391ac66fbb1fcae28188924767f16b9",
+        "version" : "0.1.2-alpha"
       }
     },
     {

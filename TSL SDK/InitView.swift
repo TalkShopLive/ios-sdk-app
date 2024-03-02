@@ -37,6 +37,7 @@ struct InitView: View {
                 
                 Spacer() // Push content to the top
             }
+            .colorScheme(.light)
             .padding()
         }
     }

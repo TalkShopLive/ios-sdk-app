@@ -50,8 +50,21 @@ struct ContentView: View {
                 }
                 .navigationTitle("SDK View")
                 
+                // Chat Class Implementation
+                NavigationLink(destination: LiveChatView()) {
+                    Text("Live Chat")
+                        .buttonStyle(.borderedProminent)
+                        .frame(width: 240)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .navigationTitle("SDK View")
+                
                 // User Class Implementation
-                NavigationLink(destination: ShowView()) {
+                NavigationLink(destination: UserView()) {
                     Text("User View")
                         .buttonStyle(.borderedProminent)
                         .frame(width: 240)
@@ -63,7 +76,7 @@ struct ContentView: View {
                 }
                 .navigationTitle("SDK View")
             }
-        }
+        }.colorScheme(.light)
     }
 }
 

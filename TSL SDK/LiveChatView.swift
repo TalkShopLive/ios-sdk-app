@@ -7,12 +7,13 @@
 import SwiftUI
 import Talkshoplive
 
-struct ChatView: View {
+struct LiveChatView: View {
     @State private var showInput: String = ""
-    var showID = "vzzg6tNu0qOv"
-    var eventID = "8WtAFFgRO1K0"
+    @State private var message: String = ""
+    @State private var result: String = ""
+    var showID = "8WtAFFgRO1K0"
     @State private var chat: Talkshoplive.Chat? = nil
-    
+
     
     var body: some View {
         VStack {
@@ -40,32 +41,42 @@ struct ChatView: View {
                     // Set the initial value for idInput
                     showInput = showID
                 }
+
+            // Type in message
+            TextField("Type your message", text: $message)
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.blue, lineWidth: 2)
+                )
+                .padding(.horizontal)
+                .padding(.bottom)
+                .font(.system(size: 22))
+
             
-            // Render Button
-            Button("Create Token - Guest") {
-                createTokenGuestUser()
+            // Send message as a guest button
+            /* Button("Send Message - Guest") {
+                sendMessageGuest()
             }
             .frame(width: 240)
             .padding()
             .foregroundColor(.white)
             .background(Color.black)
-            .cornerRadius(10)
+            .cornerRadius(10) */
             
-            // Render Button
-            Button("Create Token - Federated User") {
-                createTokenFederatedUser()
+            // send message a federated user button
+            Button("Send Message - User") {
+                sendMessageUser()
             }
             .frame(width: 240)
             .padding()
             .foregroundColor(.white)
-            .background(Color.black)
+            .background(Color.green)
             .cornerRadius(10)
             
-            // Render Token or User Id
-            if (chat != nil) {
-                Text("Token successfully created!")
-                    .padding()
-            }
+            // Show success
+            Text(result).padding()
         }
         .colorScheme(.light)
         .padding()
@@ -79,41 +90,52 @@ struct ChatView: View {
         // Replace the API URL with your actual API endpoint
         let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3",debugMode: true,testMode: true)
         print(TSL)
+        DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
+                initChat()
+            }
     }
     
-    func createTokenGuestUser() {
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSJ9.1g6lo38-PkYy9EyD4Teq_Nmi2pZYR1_EazuI-u-KISo"
-        /*
-         Payload to generate JWT Token for Guest User :
-         {
-         "iss": "sdk_2ea21de19cc8bc5e8640c7b227fef2f3", //SDK Key
-         "exp": 1799267746, // Timeinterval from now
-         "jti": "tWhBAwSTmXU6zyQK15Euyy==", // Unique Random string
-         }
-         */
+    func initChat() {
+        // initChatGuest()
+        initChatUser()
+    }
+    
+    func initChatGuest() {
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsibmFtZSI6IndhbG1hcnQtZ3Vlc3QtZmVkZXJhdGVkLXVzZXIifX0.fgHUJFi5oGx93maH0Gdp5nRWRr57K9LvIbPIwQRpQmU"
         self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:true, showKey: showInput)
     }
     
-    func createTokenFederatedUser() {
-        /*
-         Payload to generate JWT Token for Fedarated User:
-         {
-             "iss": "sdk_2ea21de19cc8bc5e8640c7b227fef2f3", //SDK Key
-             "exp": 1799267746, // Timeinterval from now
-             "jti": "tWhBAwSTmXU6zyQK15Euyy==", // Unique Random string
-             "user": {
-                 "id": "123",
-                 "name": "Mayuri"
-             }
-         }
-         */
+    func initChatUser() {
         let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.cUwgqLmLQJ_JV0vNzdUFNdPcBHk6XTf5GqGSArJSnms"
         self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: showInput)
     }
+    
+    func sendMessageGuest() {
+        if (self.message != "") {
+            self.chat?.sendMessage(message: self.message)
+        }
+        self.message = ""
+        showSuccess()
+    }
+    
+    func sendMessageUser() {
+        if (self.message != "") {
+            self.chat?.sendMessage(message: self.message)
+        }
+        self.message = ""
+        showSuccess()
+    }
+    
+    func showSuccess() {
+        self.result = "Message sent!"
+        DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
+                self.result = ""
+            }
+    }
 }
 
-struct ChatView_Previews: PreviewProvider {
+struct LiveChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView()
+        LiveChatView()
     }
 }

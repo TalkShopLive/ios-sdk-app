@@ -22,7 +22,7 @@ struct ShowView: View {
         ScrollView {
             VStack {
                 // Link to documentation
-                Link("Doc: Shows Class Usage", destination: URL(string: "https://github.com/TalkShopLive/ios-sdk?tab=readme-ov-file#shows")!)
+                Link("Doc: Show Class Usage", destination: URL(string: "https://github.com/TalkShopLive/ios-sdk?tab=readme-ov-file#shows")!)
                     .padding()
                     .foregroundColor(.blue)
                 
@@ -66,16 +66,6 @@ struct ShowView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 
-                // Fetch closed captions
-                Button("Fetch Closed Captions") {
-                    fetchClosedCaptions()
-                }
-                .frame(width: 240)
-                .padding()
-                .foregroundColor(.white)
-                .background(Color.blue)
-                .cornerRadius(10)
-                
                 // show.getDetails() Render result
                 if (showObject?.id ?? 0) != 0 && showResult == "" {
                     VStack(alignment: .leading, spacing: 10) {
@@ -91,37 +81,39 @@ struct ShowView: View {
                         Text("trailer_url: \(showObject?.trailer_url ?? "NULL")")
                         Text("air_date: \(showObject?.air_date ?? "NULL")")
                         Text("event_id: \(showObject?.event_id ?? 0)")
+                        Text("duration: \(showObject?.duration ?? 0)")
+                        Text("cc: \(showObject?.cc ?? "")")
                     }.frame(width: 300).multilineTextAlignment(.leading)
                 }
                 
                 // Show Error
-                Text(showResult)
-                    .padding()
+                if (showResult != "") {
+                    Text(showResult)
+                        .padding()
+                }
                 
                 // show.getCurrentEvent() Render result
                 if (eventObject?.name ?? "") != "" && eventResult == "" {
                     VStack(alignment: .leading, spacing: 10) {
                         Spacer()
-                        Text("Method: show.getDetails()")
-                        Text("id: \(showObject?.id ?? 0)")
-                        Text("show_key: \(showObject?.show_key ?? "")")
-                        Text("name: \(showObject?.name ?? "NULL")")
-                        Text("description: \(showObject?.description ?? "NULL")")
-                        Text("status: \(showObject?.status ?? "NULL")")
-                        Text("hls_playback_url: \(showObject?.hls_playback_url ?? "NULL")")
-                        Text("hls_url: \(showObject?.hls_url ?? "NULL")")
-                        Text("trailer_url: \(showObject?.trailer_url ?? "NULL")")
-                        Text("air_date: \(showObject?.air_date ?? "NULL")")
-                        Text("event_id: \(showObject?.event_id ?? 0)")
+                        Text("Method: show.getStatus()")
+                        Text("name: \(eventObject?.name ?? "")")
+                        Text("status: \(eventObject?.status ?? "")")
+                        Text("duration: \(eventObject?.duration ?? 0)")
+                        Text("hlsPlaybackURL: \(eventObject?.hlsPlaybackURL?.absoluteString ?? "")")
                     }.frame(width: 300).multilineTextAlignment(.leading)
                 }
                 
                 // Show Error
-                Text(eventResult)
-                    .padding()
+                if (eventResult != "") {
+                    Text(eventResult)
+                        .padding()
+                }
             }
+            .colorScheme(.light)
             .padding()
             .onAppear {
+                // In live app - Do  not initialize SDK in onAppear but on app load.
                 initializeSDK()
             }
         }
@@ -146,7 +138,7 @@ struct ShowView: View {
         self.showResult = ""
         self.eventObject = nil
         self.eventResult = ""
-        showInstance.getDetails(showId: self.showID) { result in
+        showInstance.getDetails(showId: showInput) { result in
             switch result {
                 case .success(let show):
                     // Access properties of TSLShow directly
@@ -169,7 +161,7 @@ struct ShowView: View {
         self.eventResult = ""
         self.showObject = nil
         self.showResult = ""
-        showInstance.getStatus(showId: showId) { result in
+        showInstance.getStatus(showKey: showInput) { result in
             switch result {
             case .success(let show):
                 // Access properties of TSLShow directly
@@ -181,12 +173,6 @@ struct ShowView: View {
             }
         }
     }
-    
-    func fetchClosedCaptions() {
-        self.showResult = "File Name: \n\n" + (self.showObject?.cc ?? "Closed captions file not available")
-    }
-    
-    
 }
 
 struct ShowView_Previews: PreviewProvider {
