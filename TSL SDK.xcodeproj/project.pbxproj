@@ -51,6 +51,7 @@
 		D17DA78C2B5F10FE00ED9BBF /* TSL SDKUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TSL SDKUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D17DA7902B5F10FE00ED9BBF /* TSL_SDKUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TSL_SDKUITests.swift; sourceTree = "<group>"; };
 		D17DA7922B5F10FE00ED9BBF /* TSL_SDKUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TSL_SDKUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D1E80CA02B97DEE200E1CF54 /* ios-sdk */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ios-sdk"; path = "../ios-sdk"; sourceTree = "<group>"; };
 		D1F944A42B8FD9E7005E5DCE /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		D1F944A62B8FD9FC005E5DCE /* ShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowView.swift; sourceTree = "<group>"; };
 		D1F944A82B8FDB9B005E5DCE /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
@@ -93,6 +94,7 @@
 		D17DA7692B5F10FD00ED9BBF = {
 			isa = PBXGroup;
 			children = (
+				D1E80CA02B97DEE200E1CF54 /* ios-sdk */,
 				D17DA7742B5F10FD00ED9BBF /* TSL SDK */,
 				D17DA7852B5F10FE00ED9BBF /* TSL SDKTests */,
 				D17DA78F2B5F10FE00ED9BBF /* TSL SDKUITests */,
@@ -652,8 +654,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
 			requirement = {
-				kind = exactVersion;
-				version = "0.1.2-alpha";
+				branch = development;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
