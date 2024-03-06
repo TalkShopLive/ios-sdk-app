@@ -7,16 +7,17 @@
 import SwiftUI
 import Talkshoplive
 
+var showID = "9rJ2WSDlxUw_"
+var eventID = "8WtAFFgRO1K0"
 struct ShowView: View {
-    @State private var showInput: String = ""
+    @State private var timer: Timer?
+    @State private var counter: Int = 1
+    @State private var showInput: String = showID
     @State private var showResult: String = ""
     @State private var eventResult: String = ""
     @State private var eventInput: String = ""
     @State private var showObject : Talkshoplive.ShowData? = nil
     @State private var eventObject : Talkshoplive.EventData? = nil
-    
-    var showID = "vzzg6tNu0qOv"
-    var eventID = "8WtAFFgRO1K0"
     
     var body: some View {
         ScrollView {
@@ -27,11 +28,12 @@ struct ShowView: View {
                     .foregroundColor(.blue)
                 
                 // Textfield
-                Text("Enter Show ID")
+                Text("Enter Show Key:")
                     .multilineTextAlignment(.leading)
                 
                 // Enter show ID
                 TextField("Enter ID", text: $showInput)
+                    .autocapitalization(.none)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
                     .overlay(
@@ -41,13 +43,44 @@ struct ShowView: View {
                     .padding(.horizontal)
                     .padding(.bottom)
                     .font(.system(size: 22))
-                    .onAppear {
-                        // Set the initial value for idInput
-                        showInput = showID
+                
+                Text("or autofill")
+                    .multilineTextAlignment(.leading)
+                HStack {
+                    // Created
+                    Button("Prelive") {
+                        self.showInput = "q8ojABdmOBLm"
                     }
+                    .frame(width: 80)
+                    .padding(.vertical, 2)
+                    .foregroundColor(.white)
+                    .background(Color.green)
+                    .cornerRadius(4)
+                    
+                    // Live
+                    Button("Live") {
+                        self.showInput = "8WtAFFgRO1K0"
+                    }
+                    .frame(width: 80)
+                    .padding(.vertical, 2)
+                    .foregroundColor(.black)
+                    .background(Color.yellow)
+                    .cornerRadius(4)
+                    
+                    // Finished
+                    Button("Finished") {
+                        self.showInput = "4Q4sk8XluBkG"
+                    }
+                    .frame(width: 80)
+                    .padding(.vertical, 2)
+                    .foregroundColor(.white)
+                    .background(Color.red)
+                    .cornerRadius(4)
+                }
+                .padding(.bottom, 20)
                 
                 // Fetch Shows
-                Button("Fetch Shows") {
+                Button("Fetch Show") {
                     fetchShowData()
                 }
                 .frame(width: 240)
@@ -66,8 +99,22 @@ struct ShowView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 
+                // Start Polling
+                Button(timer == nil ? "Start Polling" : "Stop Polling") {
+                    if (timer == nil) {
+                        startPolling()
+                    } else {
+                        stopPolling()
+                    }
+                }
+                .frame(width: 240)
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.blue)
+                .cornerRadius(10)
+                
                 // show.getDetails() Render result
-                if (showObject?.id ?? 0) != 0 && showResult == "" {
+                if (showObject?.id ?? 0) != 0 && showResult == "" && timer == nil {
                     VStack(alignment: .leading, spacing: 10) {
                         Spacer()
                         Text("Method: show.getDetails()")
@@ -82,7 +129,7 @@ struct ShowView: View {
                         Text("air_date: \(showObject?.air_date ?? "NULL")")
                         Text("event_id: \(showObject?.event_id ?? 0)")
                         Text("duration: \(showObject?.duration ?? 0)")
-                        Text("cc: \(showObject?.cc ?? "")")
+                        Text("cc: \(showObject?.cc ?? "NULL")")
                     }.frame(width: 300).multilineTextAlignment(.leading)
                 }
                 
@@ -93,14 +140,34 @@ struct ShowView: View {
                 }
                 
                 // show.getCurrentEvent() Render result
-                if (eventObject?.name ?? "") != "" && eventResult == "" {
+                if (eventObject != nil && eventResult == "") || timer != nil {
+                    let eventStatus = eventObject?.status ?? showObject?.status ?? "created"
                     VStack(alignment: .leading, spacing: 10) {
                         Spacer()
                         Text("Method: show.getStatus()")
-                        Text("name: \(eventObject?.name ?? "")")
-                        Text("status: \(eventObject?.status ?? "")")
-                        Text("duration: \(eventObject?.duration ?? 0)")
-                        Text("hlsPlaybackURL: \(eventObject?.hlsPlaybackURL?.absoluteString ?? "")")
+                        if (timer != nil) {
+                            Text("Counter: \(+self.counter)")
+                        } else {
+                            Text("name: \(eventObject?.name ?? showObject?.name ?? "")")
+                            Text("status: \(eventStatus)")
+                            Text("duration: \(eventObject?.duration ?? 0)")
+                            Text("hlsPlaybackURL: \(eventObject?.hls_playback_url ?? "")")
+                        }
+                        
+                        // Polling Result
+                        if (timer != nil) {
+                            Text("name: \(eventObject?.name ?? showObject?.name ?? "NULL")")
+                            Text("status: \(eventStatus)")
+                            if (eventStatus == "created") {
+                                Text("Play trailer (trailer_url): \(showObject?.trailer_url ?? "NULL")")
+                            } else if (eventStatus == "live") {
+                                Text("Show is LIVE (Use hlsPlaybackURL for streaming): \(eventObject?.hls_playback_url ?? "")")
+                            } else if (eventStatus == "transcoding") {
+                                Text("Transcoding - Show Transcoding text...")
+                            } else if (eventStatus == "finished") {
+                                Text("Show has finished - (hls_url for playback): \(showObject?.hls_url ?? "NULL")")
+                            }
+                        }
                     }.frame(width: 300).multilineTextAlignment(.leading)
                 }
                 
@@ -115,6 +182,10 @@ struct ShowView: View {
             .onAppear {
                 // In live app - Do  not initialize SDK in onAppear but on app load.
                 initializeSDK()
+            }
+            .onDisappear {
+                // clear on unmount
+                stopPolling()
             }
         }
     }
@@ -133,45 +204,73 @@ struct ShowView: View {
     
     func fetchShowData() {
         // Replace the API URL with your actual API endpoint
-        self.showResult = showInput
         let showInstance = Talkshoplive.Show()
         self.showResult = ""
         self.eventObject = nil
         self.eventResult = ""
-        showInstance.getDetails(showId: showInput) { result in
+        showInstance.getDetails(showKey: showInput) { result in
             switch result {
-                case .success(let show):
-                    // Access properties of TSLShow directly
-                    self.showObject = show
-                    print(show)
-                    // dump(show)
-                case .failure(let error):
-                    // Handle error case
-                    self.showResult = "Error: \(error.localizedDescription)"
+            case .success(let show):
+                // Access properties of TSLShow directly
+                self.showObject = show
+                print("===========fetchShowData=======")
+                print(show)
+                // dump(show)
+            case .failure(let error):
+                // Handle error case
+                self.showResult = "Error: \(error.localizedDescription)"
             }
         }
     }
     
     func fetchCurrentEvent() {
-        // Replace the API URL with your actual API endpoint
-        self.showResult = eventInput
-        self.showInput = eventID
+        // self.showInput = eventID
         let showInstance = Talkshoplive.Show()
-        let showId = eventID
         self.eventResult = ""
-        self.showObject = nil
+        if (timer == nil) {
+            self.showObject = nil
+        }
         self.showResult = ""
         showInstance.getStatus(showKey: showInput) { result in
             switch result {
             case .success(let show):
                 // Access properties of TSLShow directly
                 self.eventObject = show
+                print("===========fetchCurrentEvent=======")
+                print(show)
             case .failure(let error):
                 // Handle error case
                 self.eventResult = "Error: \(error.localizedDescription)"
                 
             }
         }
+    }
+    
+    // every 10 seconds
+    private func startPolling() {
+        fetchCurrentEvent()
+        timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { timer in
+            pollCurrentEvent()
+        }
+        if (showObject == nil) {
+            fetchShowData()
+        }
+    }
+    
+    private func pollCurrentEvent() {
+        counter = counter + 1
+        if (eventObject?.status == "transcoding") {
+            // Fetch show data for playback url
+            fetchShowData()
+        }
+        fetchCurrentEvent()
+    }
+    
+    // clear in disappear
+    private func stopPolling() {
+        timer?.invalidate()
+        timer = nil
+        counter = 1
     }
 }
 
