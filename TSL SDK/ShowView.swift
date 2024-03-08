@@ -119,17 +119,23 @@ struct ShowView: View {
                         Spacer()
                         Text("Method: show.getDetails()")
                         Text("id: \(showObject?.id ?? 0)")
-                        Text("show_key: \(showObject?.show_key ?? "")")
+                        Text("showKey: \(showObject?.showKey ?? "")")
                         Text("name: \(showObject?.name ?? "NULL")")
-                        Text("description: \(showObject?.description ?? "NULL")")
+                        Text("showDescription: \(showObject?.showDescription ?? "NULL")")
                         Text("status: \(showObject?.status ?? "NULL")")
-                        Text("hls_playback_url: \(showObject?.hls_playback_url ?? "NULL")")
-                        Text("hls_url: \(showObject?.hls_url ?? "NULL")")
-                        Text("trailer_url: \(showObject?.trailer_url ?? "NULL")")
-                        Text("air_date: \(showObject?.air_date ?? "NULL")")
-                        Text("event_id: \(showObject?.event_id ?? 0)")
+                        Text("hlsPlaybackUrl: \(showObject?.hlsPlaybackUrl ?? "NULL")")
+                        Text("hlsUrl: \(showObject?.hlsUrl ?? "NULL")")
+                        Text("trailerUrl: \(showObject?.trailerUrl ?? "NULL")")
+                        Text("airDate: \(showObject?.airDate ?? "NULL")")
+                        Text("eventId: \(showObject?.eventId ?? 0)")
                         Text("duration: \(showObject?.duration ?? 0)")
                         Text("cc: \(showObject?.cc ?? "NULL")")
+                        Text("videoThumbnailUrl: \(showObject?.videoThumbnailUrl ?? "NULL")")
+                        Text("channelLogo: \(showObject?.channelLogo ?? "NULL")")
+                        Text("channelName: \(showObject?.channelName ?? "NULL")")
+                        Text("trailerDuration: \(showObject?.trailerDuration ?? 0)")
+                        
+
                     }.frame(width: 300).multilineTextAlignment(.leading)
                 }
                 
@@ -151,7 +157,7 @@ struct ShowView: View {
                             Text("name: \(eventObject?.name ?? showObject?.name ?? "")")
                             Text("status: \(eventStatus)")
                             Text("duration: \(eventObject?.duration ?? 0)")
-                            Text("hlsPlaybackURL: \(eventObject?.hls_playback_url ?? "")")
+                            Text("hlsPlaybackURL: \(eventObject?.hlsPlaybackUrl ?? "")")
                         }
                         
                         // Polling Result
@@ -159,13 +165,13 @@ struct ShowView: View {
                             Text("name: \(eventObject?.name ?? showObject?.name ?? "NULL")")
                             Text("status: \(eventStatus)")
                             if (eventStatus == "created") {
-                                Text("Play trailer (trailer_url): \(showObject?.trailer_url ?? "NULL")")
+                                Text("Play trailer (trailerUrl): \(showObject?.trailerUrl ?? "NULL")")
                             } else if (eventStatus == "live") {
-                                Text("Show is LIVE (Use hlsPlaybackURL for streaming): \(eventObject?.hls_playback_url ?? "")")
+                                Text("Show is LIVE (Use hlsPlaybackURL for streaming): \(eventObject?.hlsPlaybackUrl ?? "")")
                             } else if (eventStatus == "transcoding") {
                                 Text("Transcoding - Show Transcoding text...")
                             } else if (eventStatus == "finished") {
-                                Text("Show has finished - (hls_url for playback): \(showObject?.hls_url ?? "NULL")")
+                                Text("Show has finished - (hlsUrl for playback): \(showObject?.hlsUrl ?? "NULL")")
                             }
                         }
                     }.frame(width: 300).multilineTextAlignment(.leading)
