@@ -165,13 +165,13 @@ struct ShowView: View {
                             Text("name: \(eventObject?.name ?? showObject?.name ?? "NULL")")
                             Text("status: \(eventStatus)")
                             if (eventStatus == "created") {
-                                Text("Play trailer (trailer_url): \(showObject?.trailerUrl ?? "NULL")")
+                                Text("Play trailer (trailerUrl): \(showObject?.trailerUrl ?? "NULL")")
                             } else if (eventStatus == "live") {
                                 Text("Show is LIVE (Use hlsPlaybackURL for streaming): \(eventObject?.hlsPlaybackUrl ?? "")")
                             } else if (eventStatus == "transcoding") {
                                 Text("Transcoding - Show Transcoding text...")
                             } else if (eventStatus == "finished") {
-                                Text("Show has finished - (hls_url for playback): \(showObject?.hlsUrl ?? "NULL")")
+                                Text("Show has finished - (hlsUrl for playback): \(showObject?.hlsUrl ?? "NULL")")
                             }
                         }
                     }.frame(width: 300).multilineTextAlignment(.leading)
