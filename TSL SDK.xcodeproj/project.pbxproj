@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		674BA7972B892CA400D7C31B /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 674BA7962B892CA400D7C31B /* Talkshoplive */; };
-		674BA79A2B89305300D7C31B /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 674BA7992B89305300D7C31B /* Talkshoplive */; };
-		677644352B86BA8C00A77BF5 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 677644342B86BA8C00A77BF5 /* Talkshoplive */; };
-		67A471922B79913200992992 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 67A471912B79913200992992 /* Talkshoplive */; };
+		673BC6832B9B919600DAB7E0 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 673BC6822B9B919600DAB7E0 /* Talkshoplive */; };
+		675235462B9BAE1F0080E8A7 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 675235452B9BAE1F0080E8A7 /* Talkshoplive */; };
+		6752354C2B9BC2270080E8A7 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 6752354B2B9BC2270080E8A7 /* Talkshoplive */; };
+		67FFBD962B992CE100ECD572 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 67FFBD952B992CE100ECD572 /* Talkshoplive */; };
+		D1330CDF2B92868300A5FBD2 /* LiveChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1330CDE2B92868300A5FBD2 /* LiveChatView.swift */; };
 		D17DA7762B5F10FD00ED9BBF /* TSL_SDKApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7752B5F10FD00ED9BBF /* TSL_SDKApp.swift */; };
 		D17DA7782B5F10FD00ED9BBF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7772B5F10FD00ED9BBF /* ContentView.swift */; };
 		D17DA77A2B5F10FE00ED9BBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D17DA7792B5F10FE00ED9BBF /* Assets.xcassets */; };
@@ -18,6 +19,10 @@
 		D17DA7872B5F10FE00ED9BBF /* TSL_SDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7862B5F10FE00ED9BBF /* TSL_SDKTests.swift */; };
 		D17DA7912B5F10FE00ED9BBF /* TSL_SDKUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7902B5F10FE00ED9BBF /* TSL_SDKUITests.swift */; };
 		D17DA7932B5F10FE00ED9BBF /* TSL_SDKUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17DA7922B5F10FE00ED9BBF /* TSL_SDKUITestsLaunchTests.swift */; };
+		D1F944A52B8FD9E7005E5DCE /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F944A42B8FD9E7005E5DCE /* ChatView.swift */; };
+		D1F944A72B8FD9FC005E5DCE /* ShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F944A62B8FD9FC005E5DCE /* ShowView.swift */; };
+		D1F944A92B8FDB9B005E5DCE /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F944A82B8FDB9B005E5DCE /* UserView.swift */; };
+		D1F944AB2B8FDBC2005E5DCE /* InitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F944AA2B8FDBC2005E5DCE /* InitView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D1330CDE2B92868300A5FBD2 /* LiveChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveChatView.swift; sourceTree = "<group>"; };
 		D17DA7722B5F10FD00ED9BBF /* TSL SDK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TSL SDK.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D17DA7752B5F10FD00ED9BBF /* TSL_SDKApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TSL_SDKApp.swift; sourceTree = "<group>"; };
 		D17DA7772B5F10FD00ED9BBF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -48,6 +54,11 @@
 		D17DA78C2B5F10FE00ED9BBF /* TSL SDKUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TSL SDKUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D17DA7902B5F10FE00ED9BBF /* TSL_SDKUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TSL_SDKUITests.swift; sourceTree = "<group>"; };
 		D17DA7922B5F10FE00ED9BBF /* TSL_SDKUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TSL_SDKUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D1E80CA02B97DEE200E1CF54 /* ios-sdk */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ios-sdk"; path = "../ios-sdk"; sourceTree = "<group>"; };
+		D1F944A42B8FD9E7005E5DCE /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		D1F944A62B8FD9FC005E5DCE /* ShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowView.swift; sourceTree = "<group>"; };
+		D1F944A82B8FDB9B005E5DCE /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		D1F944AA2B8FDBC2005E5DCE /* InitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,10 +66,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				677644352B86BA8C00A77BF5 /* Talkshoplive in Frameworks */,
-				674BA7972B892CA400D7C31B /* Talkshoplive in Frameworks */,
-				674BA79A2B89305300D7C31B /* Talkshoplive in Frameworks */,
-				67A471922B79913200992992 /* Talkshoplive in Frameworks */,
+				673BC6832B9B919600DAB7E0 /* Talkshoplive in Frameworks */,
+				675235462B9BAE1F0080E8A7 /* Talkshoplive in Frameworks */,
+				6752354C2B9BC2270080E8A7 /* Talkshoplive in Frameworks */,
+				67FFBD962B992CE100ECD572 /* Talkshoplive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +100,7 @@
 		D17DA7692B5F10FD00ED9BBF = {
 			isa = PBXGroup;
 			children = (
+				D1E80CA02B97DEE200E1CF54 /* ios-sdk */,
 				D17DA7742B5F10FD00ED9BBF /* TSL SDK */,
 				D17DA7852B5F10FE00ED9BBF /* TSL SDKTests */,
 				D17DA78F2B5F10FE00ED9BBF /* TSL SDKUITests */,
@@ -114,6 +126,11 @@
 				D17DA7772B5F10FD00ED9BBF /* ContentView.swift */,
 				D17DA7792B5F10FE00ED9BBF /* Assets.xcassets */,
 				D17DA77B2B5F10FE00ED9BBF /* Preview Content */,
+				D1F944A42B8FD9E7005E5DCE /* ChatView.swift */,
+				D1F944A62B8FD9FC005E5DCE /* ShowView.swift */,
+				D1F944A82B8FDB9B005E5DCE /* UserView.swift */,
+				D1F944AA2B8FDBC2005E5DCE /* InitView.swift */,
+				D1330CDE2B92868300A5FBD2 /* LiveChatView.swift */,
 			);
 			path = "TSL SDK";
 			sourceTree = "<group>";
@@ -160,10 +177,10 @@
 			);
 			name = "TSL SDK";
 			packageProductDependencies = (
-				67A471912B79913200992992 /* Talkshoplive */,
-				677644342B86BA8C00A77BF5 /* Talkshoplive */,
-				674BA7962B892CA400D7C31B /* Talkshoplive */,
-				674BA7992B89305300D7C31B /* Talkshoplive */,
+				67FFBD952B992CE100ECD572 /* Talkshoplive */,
+				673BC6822B9B919600DAB7E0 /* Talkshoplive */,
+				675235452B9BAE1F0080E8A7 /* Talkshoplive */,
+				6752354B2B9BC2270080E8A7 /* Talkshoplive */,
 			);
 			productName = "TSL SDK";
 			productReference = D17DA7722B5F10FD00ED9BBF /* TSL SDK.app */;
@@ -238,7 +255,7 @@
 			);
 			mainGroup = D17DA7692B5F10FD00ED9BBF;
 			packageReferences = (
-				674BA7982B89305300D7C31B /* XCRemoteSwiftPackageReference "ios-sdk" */,
+				6752354A2B9BC2270080E8A7 /* XCRemoteSwiftPackageReference "ios-sdk" */,
 			);
 			productRefGroup = D17DA7732B5F10FD00ED9BBF /* Products */;
 			projectDirPath = "";
@@ -283,6 +300,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D17DA7782B5F10FD00ED9BBF /* ContentView.swift in Sources */,
+				D1F944A72B8FD9FC005E5DCE /* ShowView.swift in Sources */,
+				D1F944A92B8FDB9B005E5DCE /* UserView.swift in Sources */,
+				D1F944A52B8FD9E7005E5DCE /* ChatView.swift in Sources */,
+				D1330CDF2B92868300A5FBD2 /* LiveChatView.swift in Sources */,
+				D1F944AB2B8FDBC2005E5DCE /* InitView.swift in Sources */,
 				D17DA7762B5F10FD00ED9BBF /* TSL_SDKApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,7 +471,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"TSL SDK/Preview Content\"";
 				DEVELOPMENT_TEAM = R4WACU9V9E;
 				ENABLE_PREVIEWS = YES;
@@ -486,7 +508,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"TSL SDK/Preview Content\"";
 				DEVELOPMENT_TEAM = R4WACU9V9E;
 				ENABLE_PREVIEWS = YES;
@@ -637,31 +659,31 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		674BA7982B89305300D7C31B /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
+		6752354A2B9BC2270080E8A7 /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
 			requirement = {
-				kind = revision;
-				revision = e59bc318c3ee1fc4a35be8daced0a8ba4d67685d;
+				branch = development;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		674BA7962B892CA400D7C31B /* Talkshoplive */ = {
+		673BC6822B9B919600DAB7E0 /* Talkshoplive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Talkshoplive;
 		};
-		674BA7992B89305300D7C31B /* Talkshoplive */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 674BA7982B89305300D7C31B /* XCRemoteSwiftPackageReference "ios-sdk" */;
-			productName = Talkshoplive;
-		};
-		677644342B86BA8C00A77BF5 /* Talkshoplive */ = {
+		675235452B9BAE1F0080E8A7 /* Talkshoplive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Talkshoplive;
 		};
-		67A471912B79913200992992 /* Talkshoplive */ = {
+		6752354B2B9BC2270080E8A7 /* Talkshoplive */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6752354A2B9BC2270080E8A7 /* XCRemoteSwiftPackageReference "ios-sdk" */;
+			productName = Talkshoplive;
+		};
+		67FFBD952B992CE100ECD572 /* Talkshoplive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Talkshoplive;
 		};
