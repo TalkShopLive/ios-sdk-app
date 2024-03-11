@@ -18,10 +18,79 @@ struct ContentView: View {
     var eventID = "8WtAFFgRO1K0"
     
     var body: some View {
+<<<<<<< Updated upstream
         VStack {
             
             Button("Initialize SDK") {
                 initializeSDK()
+=======
+        NavigationView {
+            VStack {
+                // SDK Initialization
+                NavigationLink(destination: InitView()) {
+                    Text("Initialize SDK")
+                        .buttonStyle(.borderedProminent)
+                        .frame(width: 240)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .navigationTitle("SDK View")
+                
+                // Show Class Implementation
+                NavigationLink(destination: ShowView()) {
+                    Text("Show View")
+                        .buttonStyle(.borderedProminent)
+                        .frame(width: 240)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .navigationTitle("SDK View")
+                
+                // Chat Class Implementation
+                NavigationLink(destination: ChatView()) {
+                    Text("Chat View")
+                        .buttonStyle(.borderedProminent)
+                        .frame(width: 240)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                        .background(Color.cyan)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .navigationTitle("SDK View")
+                
+                // Chat Class Implementation
+                NavigationLink(destination: LiveChatView2()) {
+                    Text("Live Chat")
+                        .buttonStyle(.borderedProminent)
+                        .frame(width: 240)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .navigationTitle("SDK View")
+                
+                // User Class Implementation
+                NavigationLink(destination: UserView()) {
+                    Text("User View")
+                        .buttonStyle(.borderedProminent)
+                        .frame(width: 240)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                        .background(Color.yellow)
+                        .foregroundColor(.black)
+                        .cornerRadius(8)
+                }
+                .navigationTitle("SDK View")
+>>>>>>> Stashed changes
             }
             .padding()
             .foregroundColor(.white)
