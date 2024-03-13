@@ -51,7 +51,7 @@ struct ContentView: View {
                 .navigationTitle("SDK View")
                 
                 // Chat Class Implementation
-                NavigationLink(destination: LiveChatView2()) {
+                NavigationLink(destination: LiveChat()) {
                     Text("Live Chat")
                         .buttonStyle(.borderedProminent)
                         .frame(width: 240)
