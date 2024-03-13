@@ -19,40 +19,39 @@ struct ChatMessage: Identifiable, Equatable {
 }
 var defaultShowID = "8WtAFFgRO1K0"
 struct LiveChat: View {
-    @State private var messages: [ChatMessage] = [
-        ChatMessage(sender: "Me", message: "Hello!"),
-        ChatMessage(sender: "John", message: "Hi there!"),
-        ChatMessage(sender: "Me", message: "How are you?"),
-        ChatMessage(sender: "John", message: "I'm good, thanks!"),
-        ChatMessage(sender: "John", message: "What about you?"),
-        ChatMessage(sender: "Me", message: "Doing well, thanks!"),
-    ]
+    @State var messages: [Talkshoplive.MessageBase] = []
     @State private var showInput: String = defaultShowID
     @State private var newMessage: String = ""
     @State private var scrollToBottom = false
     @State private var chat: Talkshoplive.Chat? = nil
     @StateObject private var viewModel = LiveChatModel()
+    var myUserId = "federated_user.walmart.123"
     
     var body: some View {
         VStack {
             ScrollViewReader { scrollView in
                 ScrollView {
                     LazyVStack {
-                        ForEach(messages) { message in
-                            ChatBubble(message: message)
+                        ForEach(messages.indices, id: \.self) { index in
+                            let isMe = (messages[index].payload?.sender?.id == myUserId) ? true : false
+                            ChatBubble(message: messages[index],isMe: isMe)
                         }
-                        .onChange(of: messages, perform: { _ in
+                        .onChange(of: messages.indices, perform: { _ in
                             if scrollToBottom {
-                                scrollView.scrollTo(messages.last?.id, anchor: .bottom)
+                                scrollView.scrollTo(messages.count-1, anchor: .bottom)
+                                scrollToBottom = false
                             }
                         })
                     }
                     .padding(.horizontal)
                 }
-                .onAppear {
-                    scrollToBottom = true
-                }
             }
+            
+            .onReceive(viewModel.$message, perform: { newMessage in
+                if let newMessage = newMessage {
+                    messages.append(newMessage)
+                }
+            })
             
             HStack {
                 TextField("Type a message", text: $newMessage)
@@ -103,8 +102,6 @@ struct LiveChat: View {
         // Fetch messages on init
         DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
             fetchMessageHistory()
-            
-            self.chat?.delegate = viewModel
         }
     }
     
@@ -116,12 +113,13 @@ struct LiveChat: View {
     func initChatUser() {
         let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.cUwgqLmLQJ_JV0vNzdUFNdPcBHk6XTf5GqGSArJSnms"
         self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: showInput)
+        self.chat?.delegate = viewModel
     }
     
     private func sendMessage_temp() {
         if !newMessage.isEmpty {
             let message = ChatMessage(sender: "Me", message: newMessage)
-            messages.append(message)
+//            messages.append(message)
             newMessage = ""
             scrollToBottom = true
         }
@@ -144,19 +142,14 @@ struct LiveChat: View {
     }
     
     func fetchMessageHistory() {
-        self.chat?.getChatMessages(limit: 2) { result in
+        self.chat?.getChatMessages(limit: 25) { result in
             switch result {
             case let .success((messageArray,page)):
+                scrollToBottom = true
                 // Handle the successful result with the message array and optional nextPage
-                //          print("Received chat messages:", messageArray)
+//                          print("Received chat messages:", messageArray)
                 //          print("Received next page:", page)
-                for i in messageArray {
-                    //sender details
-                    print("\n ------------------- APP ------------------- \n", i.payload!.sender!)
-                    print("--Text-->", i.payload?.text)
-                    print("-------------------")
-                }
-                // self.nextPage = page
+                self.messages = messageArray
             case .failure(let error):
                 print("Error fetching chat messages: \(error.localizedDescription)")
             }
@@ -165,42 +158,45 @@ struct LiveChat: View {
 }
 
 class LiveChatModel: ObservableObject, ChatDelegate {
-    @Published var message: String = ""
-    func onNewMessage(_ message: Talkshoplive.MessageData) {
+    @Published var message: MessageBase?
+    func onNewMessage(_ message: Talkshoplive.MessageBase) {
         print("APP : Recieved New Message => ", message)
+        self.message = message
         dump(message)
     }
 }
 
-
 struct ChatBubble: View {
-    let message: ChatMessage
-    
+    var message: Talkshoplive.MessageBase // Replace YourMessageType with the actual type of your messages
+    var isMe: Bool = false // Add a property to determine if the message is sent by the user
+
     var body: some View {
         HStack {
-            if message.sender == "Me" {
-                Spacer()
-            }
-            
-            VStack(alignment: message.sender == "Me" ? .trailing : .leading) {
-                Text(message.sender)
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                
-                Text(message.message)
+            Spacer().frame(width: isMe ? 0 : 10) // Adjust spacing for alignment
+
+            VStack(alignment: isMe ? .trailing : .leading, spacing: 5) {
+                if let senderName = message.payload?.sender?.name, !senderName.isEmpty {
+                    Text(senderName)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+
+                Text(message.payload?.text ?? "")
                     .padding()
-                    .background(message.sender == "Me" ? Color.blue : Color.gray)
+                    .background(isMe ? Color.blue : Color.gray)
                     .foregroundColor(.white)
                     .cornerRadius(10)
+                    .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : .leading)
             }
-            
-            if message.sender != "Me" {
-                Spacer()
-            }
+            .frame(maxWidth: .infinity, alignment: isMe ? .trailing : .leading) // Expand VStack to fill the width
+
+            Spacer().frame(width: isMe ? 10 : 0)
         }
         .padding(.vertical, 5)
     }
 }
+
+
 
 struct LiveChat_Previews: PreviewProvider {
     static var previews: some View {
