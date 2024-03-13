@@ -26,6 +26,7 @@ struct LiveChat: View {
     @State private var chat: Talkshoplive.Chat? = nil
     @StateObject private var viewModel = LiveChatModel()
     var myUserId = "federated_user.walmart.123"
+    @State private var nextPage : Talkshoplive.MessagePage?
     
     var body: some View {
         VStack {
@@ -35,8 +36,16 @@ struct LiveChat: View {
                         ForEach(messages.indices, id: \.self) { index in
                             let isMe = (messages[index].payload?.sender?.id == myUserId) ? true : false
                             ChatBubble(message: messages[index],isMe: isMe)
+                            .onAppear {
+                                // Check if the last item is about to appear
+                                if messages.count > 0 && index == messages.indices.first{
+                                    // Trigger loading more content here
+                                    // Fetch messages on init
+                                    fetchMessageHistory(isLoadMore: true)
+                                }
+                            }
                         }
-                        .onChange(of: messages.indices, perform: { _ in
+                        .onChange(of: scrollToBottom, perform: { _ in
                             if scrollToBottom {
                                 scrollView.scrollTo(messages.count-1, anchor: .bottom)
                                 scrollToBottom = false
@@ -47,7 +56,9 @@ struct LiveChat: View {
                 }
             }
             
+            
             .onReceive(viewModel.$message, perform: { newMessage in
+                scrollToBottom = true
                 if let newMessage = newMessage {
                     messages.append(newMessage)
                 }
@@ -96,10 +107,10 @@ struct LiveChat: View {
     }
     
     func initChat() {
-        // initChatGuest()
+//         initChatGuest()
         initChatUser()
         
-        // Fetch messages on init
+//        // Fetch messages on init
         DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
             fetchMessageHistory()
         }
@@ -108,6 +119,7 @@ struct LiveChat: View {
     func initChatGuest() {
         let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsibmFtZSI6IndhbG1hcnQtZ3Vlc3QtZmVkZXJhdGVkLXVzZXIifX0.fgHUJFi5oGx93maH0Gdp5nRWRr57K9LvIbPIwQRpQmU"
         self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:true, showKey: showInput)
+        self.chat?.delegate = viewModel
     }
     
     func initChatUser() {
@@ -119,7 +131,6 @@ struct LiveChat: View {
     private func sendMessage_temp() {
         if !newMessage.isEmpty {
             let message = ChatMessage(sender: "Me", message: newMessage)
-//            messages.append(message)
             newMessage = ""
             scrollToBottom = true
         }
@@ -141,15 +152,19 @@ struct LiveChat: View {
         }
     }
     
-    func fetchMessageHistory() {
-        self.chat?.getChatMessages(limit: 25) { result in
+    func fetchMessageHistory(isLoadMore: Bool = false) {
+        
+        self.chat?.getChatMessages(limit: 25,start: (nextPage != nil ? nextPage?.start : nil) ) { result in
             switch result {
             case let .success((messageArray,page)):
-                scrollToBottom = true
+                if !isLoadMore {
+                    self.scrollToBottom = true
+                }
                 // Handle the successful result with the message array and optional nextPage
 //                          print("Received chat messages:", messageArray)
                 //          print("Received next page:", page)
-                self.messages = messageArray
+                self.messages.insert(contentsOf: messageArray, at: 0)
+                nextPage = page
             case .failure(let error):
                 print("Error fetching chat messages: \(error.localizedDescription)")
             }
