@@ -138,7 +138,13 @@ struct LiveChat: View {
     
     private func sendMessage() {
         if (!newMessage.isEmpty) {
-            self.chat?.sendMessage(message: newMessage)
+            self.chat?.sendMessage(message: newMessage, completion: {status, error in
+                if status {
+                    print("Message Send Successfully", status)
+                } else {
+                    print("Error", error)
+                }
+            })
             newMessage = ""
             scrollToBottom = true
             // showSuccess()

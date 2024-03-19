@@ -53,17 +53,6 @@ struct LiveChatView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
                 .font(.system(size: 22))
-
-            
-            // Send message as a guest button
-            /* Button("Send Message - Guest") {
-                sendMessageGuest()
-            }
-            .frame(width: 240)
-            .padding()
-            .foregroundColor(.white)
-            .background(Color.black)
-            .cornerRadius(10) */
             
             // send message a federated user button
             Button("Send Message - User") {
@@ -110,17 +99,15 @@ struct LiveChatView: View {
         self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: showInput)
     }
     
-    func sendMessageGuest() {
-        if (self.message != "") {
-            self.chat?.sendMessage(message: self.message)
-        }
-        self.message = ""
-        showSuccess()
-    }
-    
     func sendMessageUser() {
         if (self.message != "") {
-            self.chat?.sendMessage(message: self.message)
+            self.chat?.sendMessage(message: self.message, completion: {status, error in
+                if status {
+                    print("Message Send Successfully : ", status)
+                } else {
+                    print("Error", error)
+                }
+            })
         }
         self.message = ""
         showSuccess()
