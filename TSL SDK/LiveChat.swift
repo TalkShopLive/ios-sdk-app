@@ -31,37 +31,54 @@ struct LiveChat: View {
     var body: some View {
         VStack {
             ScrollViewReader { scrollView in
-                ScrollView {
-                    LazyVStack {
-                        ForEach(messages.indices, id: \.self) { index in
-                            let isMe = (messages[index].payload?.sender?.id == myUserId) ? true : false
-                            ChatBubble(message: messages[index],isMe: isMe)
-                            .onAppear {
-                                // Check if the last item is about to appear
-                                if messages.count > 0 && index == messages.indices.first{
-                                    // Trigger loading more content here
-                                    // Fetch messages on init
-                                    fetchMessageHistory(isLoadMore: true)
+                
+                List {
+                    ForEach(messages.indices, id: \.self) { index in
+                        let isMe = (messages[index].payload?.sender?.id == myUserId) ? true : false
+                        let chatBubble = ChatBubble(message: messages[index], isMe: isMe)
+                            .frame(maxWidth: .infinity) // Allow ChatBubble to expand to full width
+                            .contentShape(Rectangle()) // Enable interaction with the List
+                            .listRowSeparator(.hidden) // Hide the separator line
+                        
+                        if isMe {
+                            chatBubble.swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button {
+                                    // Perform action when the button is tapped
+                                    // For example, delete the message
+                                    self.deleteMessage(at: index)
+                                } label: {
+                                    Image(systemName: "trash")
                                 }
+                                .tint(.red)
                             }
+                        } else {
+                            chatBubble
                         }
-                        .onChange(of: scrollToBottom, perform: { _ in
-                            if scrollToBottom {
-                                scrollView.scrollTo(messages.count-1, anchor: .bottom)
-                                scrollToBottom = false
-                            }
-                        })
                     }
-                    .padding(.horizontal)
                 }
+                .contentShape(Rectangle()) // Enable interaction with the List
+                .listStyle(PlainListStyle()) // Remove default inset
+                
+                .onChange(of: messages.count) { _ in
+                    // Scroll to the last index when the number of messages changes
+                    scrollView.scrollTo(messages.count - 1, anchor: .bottom)
+                }
+                
             }
             
-            
             .onReceive(viewModel.$message, perform: { newMessage in
-                scrollToBottom = true
                 if let newMessage = newMessage {
-                    messages.append(newMessage)
+                    if newMessage.payload?.key == .messageDeleted {
+                        if let index = messages.firstIndex(where: { messageObject in
+                            messageObject.published == newMessage.payload?.timeToken
+                        }) {
+                            messages.remove(at: index)
+                        }
+                    } else {
+                        messages.append(newMessage)
+                    }
                 }
+                scrollToBottom = true
             })
             
             HStack {
@@ -84,12 +101,22 @@ struct LiveChat: View {
                 .cornerRadius(10)
             }
             .padding(.trailing)
+            
         }
+        
         .navigationTitle("Chat")
         .onAppear() {
             initializeSDK()
         }
+        
+        .onDisappear() {
+            self.chat?.clean()
+        }
+        
+        
     }
+    
+    
     
     func initializeSDK() {
         // Assuming SDK initialization is asynchronous
@@ -103,6 +130,23 @@ struct LiveChat: View {
             case .failure(let error):
                 print("SDK Initialization Failed:: \(error.localizedDescription)")
             }
+        }
+    }
+    
+    private func deleteMessage(at index: Int) {
+//           messages.remove(at: index)
+        let message = self.messages[index]
+        if let timetoken = message.published {
+            print("TimeToken",timetoken)
+           
+            self.chat?.deleteMessage(timeToken: timetoken, completion: { status, error in
+                if status {
+//                    self.messages.remove(at: index)
+                    print("APP : Message deleted Successfully", status)
+                } else {
+                    print("APP : Error", error?.localizedDescription)
+                }
+            })
         }
     }
     
@@ -140,9 +184,9 @@ struct LiveChat: View {
         if (!newMessage.isEmpty) {
             self.chat?.sendMessage(message: newMessage, completion: {status, error in
                 if status {
-                    print("Message Send Successfully", status)
+                    print("APP : Message Send Successfully", status)
                 } else {
-                    print("Error", error)
+                    print("APP : Error", error)
                 }
             })
             newMessage = ""
@@ -163,6 +207,7 @@ struct LiveChat: View {
         self.chat?.getChatMessages(limit: 25,start: (nextPage != nil ? nextPage?.start : nil) ) { result in
             switch result {
             case let .success((messageArray,page)):
+                print("History", messageArray)
                 if !isLoadMore {
                     self.scrollToBottom = true
                 }
@@ -180,6 +225,14 @@ struct LiveChat: View {
 
 class LiveChatModel: ObservableObject, ChatDelegate {
     @Published var message: MessageBase?
+
+    
+    func onDeleteMessage(_ message: Talkshoplive.MessageBase) {
+        print("APP : Message Removed => ", message)
+        self.message = message
+        dump(message)
+    }
+    
     func onNewMessage(_ message: Talkshoplive.MessageBase) {
         print("APP : Recieved New Message => ", message)
         self.message = message
@@ -190,18 +243,19 @@ class LiveChatModel: ObservableObject, ChatDelegate {
 struct ChatBubble: View {
     var message: Talkshoplive.MessageBase // Replace YourMessageType with the actual type of your messages
     var isMe: Bool = false // Add a property to determine if the message is sent by the user
-
+    
     var body: some View {
-        HStack {
-            Spacer().frame(width: isMe ? 0 : 10) // Adjust spacing for alignment
-
+        HStack(spacing: 0) {
+    
+            Spacer(minLength: 0)
+            
             VStack(alignment: isMe ? .trailing : .leading, spacing: 5) {
                 if let senderName = message.payload?.sender?.name, !senderName.isEmpty {
                     Text(senderName)
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
-
+                
                 Text(message.payload?.text ?? "")
                     .padding()
                     .background(isMe ? Color.blue : Color.gray)
@@ -211,11 +265,12 @@ struct ChatBubble: View {
             }
             .frame(maxWidth: .infinity, alignment: isMe ? .trailing : .leading) // Expand VStack to fill the width
 
-            Spacer().frame(width: isMe ? 10 : 0)
+            Spacer(minLength: 0)
         }
         .padding(.vertical, 5)
     }
 }
+
 
 
 

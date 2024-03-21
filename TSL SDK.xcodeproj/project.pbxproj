@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6731670D2BAB651600AC4D81 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 6731670C2BAB651600AC4D81 /* Talkshoplive */; };
+		673167132BACB78500AC4D81 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 673167122BACB78500AC4D81 /* Talkshoplive */; };
+		673167162BACE94200AC4D81 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 673167152BACE94200AC4D81 /* Talkshoplive */; };
 		6733615A2BA1F27D00F0ED51 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 673361592BA1F27D00F0ED51 /* Talkshoplive */; };
-		673A10512BAA316E00882A52 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 673A10502BAA316E00882A52 /* Talkshoplive */; };
+		673A10542BAA442F00882A52 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 673A10532BAA442F00882A52 /* Talkshoplive */; };
 		673BC6832B9B919600DAB7E0 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 673BC6822B9B919600DAB7E0 /* Talkshoplive */; };
 		675235462B9BAE1F0080E8A7 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 675235452B9BAE1F0080E8A7 /* Talkshoplive */; };
 		6762941D2BA112950060FE31 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 6762941C2BA112950060FE31 /* Talkshoplive */; };
@@ -71,10 +74,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673167162BACE94200AC4D81 /* Talkshoplive in Frameworks */,
 				676294232BA146B50060FE31 /* Talkshoplive in Frameworks */,
+				673167132BACB78500AC4D81 /* Talkshoplive in Frameworks */,
 				673BC6832B9B919600DAB7E0 /* Talkshoplive in Frameworks */,
+				6731670D2BAB651600AC4D81 /* Talkshoplive in Frameworks */,
 				675235462B9BAE1F0080E8A7 /* Talkshoplive in Frameworks */,
-				673A10512BAA316E00882A52 /* Talkshoplive in Frameworks */,
+				673A10542BAA442F00882A52 /* Talkshoplive in Frameworks */,
 				6762941D2BA112950060FE31 /* Talkshoplive in Frameworks */,
 				6733615A2BA1F27D00F0ED51 /* Talkshoplive in Frameworks */,
 				67FFBD962B992CE100ECD572 /* Talkshoplive in Frameworks */,
@@ -192,7 +198,10 @@
 				6762941C2BA112950060FE31 /* Talkshoplive */,
 				676294222BA146B50060FE31 /* Talkshoplive */,
 				673361592BA1F27D00F0ED51 /* Talkshoplive */,
-				673A10502BAA316E00882A52 /* Talkshoplive */,
+				673A10532BAA442F00882A52 /* Talkshoplive */,
+				6731670C2BAB651600AC4D81 /* Talkshoplive */,
+				673167122BACB78500AC4D81 /* Talkshoplive */,
+				673167152BACE94200AC4D81 /* Talkshoplive */,
 			);
 			productName = "TSL SDK";
 			productReference = D17DA7722B5F10FD00ED9BBF /* TSL SDK.app */;
@@ -267,7 +276,7 @@
 			);
 			mainGroup = D17DA7692B5F10FD00ED9BBF;
 			packageReferences = (
-				673A104F2BAA316E00882A52 /* XCRemoteSwiftPackageReference "ios-sdk" */,
+				673167142BACE94200AC4D81 /* XCRemoteSwiftPackageReference "ios-sdk" */,
 			);
 			productRefGroup = D17DA7732B5F10FD00ED9BBF /* Products */;
 			projectDirPath = "";
@@ -672,24 +681,36 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		673A104F2BAA316E00882A52 /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
+		673167142BACE94200AC4D81 /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
 			requirement = {
-				kind = revision;
-				revision = 7a81117c03883c2fa8952c252bc399cd0453dd76;
+				branch = development;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6731670C2BAB651600AC4D81 /* Talkshoplive */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Talkshoplive;
+		};
+		673167122BACB78500AC4D81 /* Talkshoplive */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Talkshoplive;
+		};
+		673167152BACE94200AC4D81 /* Talkshoplive */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 673167142BACE94200AC4D81 /* XCRemoteSwiftPackageReference "ios-sdk" */;
+			productName = Talkshoplive;
+		};
 		673361592BA1F27D00F0ED51 /* Talkshoplive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Talkshoplive;
 		};
-		673A10502BAA316E00882A52 /* Talkshoplive */ = {
+		673A10532BAA442F00882A52 /* Talkshoplive */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 673A104F2BAA316E00882A52 /* XCRemoteSwiftPackageReference "ios-sdk" */;
 			productName = Talkshoplive;
 		};
 		673BC6822B9B919600DAB7E0 /* Talkshoplive */ = {
