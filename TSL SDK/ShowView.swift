@@ -159,6 +159,8 @@ struct ShowView: View {
                             Text("duration: \(eventObject?.duration ?? 0)")
                             Text("hlsPlaybackURL: \(eventObject?.hlsPlaybackUrl ?? "")")
                             Text("streamInCloud: \(eventObject?.streamInCloud ?? false ? "true" : "false")")
+                            Text("totalViews: \(eventObject?.totalViews ?? 0)")
+
                         }
                         
                         // Polling Result
@@ -176,6 +178,7 @@ struct ShowView: View {
                             }
                             
                             Text("streamInCloud: \(eventObject?.streamInCloud ?? false ? "true" : "false")")
+                            Text("totalViews: \(eventObject?.totalViews ?? 0)")
                         }
                     }.frame(width: 300).multilineTextAlignment(.leading)
                 }
