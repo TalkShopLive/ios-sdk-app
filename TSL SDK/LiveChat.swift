@@ -8,15 +8,6 @@
 import SwiftUI
 import Talkshoplive
 
-struct ChatMessage: Identifiable, Equatable {
-    let id = UUID()
-    let sender: String
-    let message: String
-    
-    static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
-        return lhs.id == rhs.id && lhs.sender == rhs.sender && lhs.message == rhs.message
-    }
-}
 var defaultShowID = "8WtAFFgRO1K0"
 struct LiveChat: View {
     @State var messages: [Talkshoplive.MessageBase] = []
@@ -68,7 +59,7 @@ struct LiveChat: View {
             
             .onReceive(viewModel.$message, perform: { newMessage in
                 if let newMessage = newMessage {
-                    if newMessage.payload?.key == .messageDeleted {
+                    if let key = newMessage.payload?.key, key.isEqual(to: .messageDeleted) {
                         if let index = messages.firstIndex(where: { messageObject in
                             messageObject.published == newMessage.payload?.timeToken
                         }) {
@@ -107,6 +98,7 @@ struct LiveChat: View {
         .navigationTitle("Chat")
         .onAppear() {
             initializeSDK()
+            nextPage = nil
         }
         
         .onDisappear() {
@@ -161,23 +153,23 @@ struct LiveChat: View {
     }
     
     func initChatGuest() {
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsibmFtZSI6IndhbG1hcnQtZ3Vlc3QtZmVkZXJhdGVkLXVzZXIifX0.fgHUJFi5oGx93maH0Gdp5nRWRr57K9LvIbPIwQRpQmU"
-        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:true, showKey: showInput)
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSJ9.AJxhg3FOX_vlWo9Zx8yg_YQUbJjw3PPThXViJ2EZU0s"
+        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:true, showKey: showInput) {status,error in
+            if let error = error {
+                print("APP : Error", error.localizedDescription)
+            }
+        }
         self.chat?.delegate = viewModel
     }
     
     func initChatUser() {
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.cUwgqLmLQJ_JV0vNzdUFNdPcBHk6XTf5GqGSArJSnms"
-        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: showInput)
-        self.chat?.delegate = viewModel
-    }
-    
-    private func sendMessage_temp() {
-        if !newMessage.isEmpty {
-            let message = ChatMessage(sender: "Me", message: newMessage)
-            newMessage = ""
-            scrollToBottom = true
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.1mox9tZ_rbetPaNbSJF75ABw-CLkcy3nykVV52QBxqw"
+        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: showInput) {status,error in
+            if let error = error {
+                print("APP : Error", error.localizedDescription)
+            }
         }
+        self.chat?.delegate = viewModel
     }
     
     private func sendMessage() {
@@ -186,7 +178,9 @@ struct LiveChat: View {
                 if status {
                     print("APP : Message Send Successfully", status)
                 } else {
-                    print("APP : Error", error)
+                    if let error = error {
+                        print("APP : Error", error.localizedDescription)
+                    }
                 }
             })
             newMessage = ""
@@ -203,11 +197,11 @@ struct LiveChat: View {
     }
     
     func fetchMessageHistory(isLoadMore: Bool = false) {
-        
+        print("Page---", nextPage)
         self.chat?.getChatMessages(limit: 25,start: (nextPage != nil ? nextPage?.start : nil) ) { result in
             switch result {
             case let .success((messageArray,page)):
-                print("History", messageArray)
+//                print("History", messageArray)
                 if !isLoadMore {
                     self.scrollToBottom = true
                 }
@@ -217,7 +211,7 @@ struct LiveChat: View {
                 self.messages.insert(contentsOf: messageArray, at: 0)
                 nextPage = page
             case .failure(let error):
-                print("Error fetching chat messages: \(error.localizedDescription)")
+                print("APP : Error fetching chat messages: \(error.localizedDescription)")
             }
         }
     }

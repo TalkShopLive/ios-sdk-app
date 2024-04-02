@@ -18,6 +18,8 @@ struct ShowView: View {
     @State private var eventInput: String = ""
     @State private var showObject : Talkshoplive.ShowData? = nil
     @State private var eventObject : Talkshoplive.EventData? = nil
+    let showInstance = Talkshoplive.Show()
+
     
     var body: some View {
         ScrollView {
@@ -216,7 +218,6 @@ struct ShowView: View {
     
     func fetchShowData() {
         // Replace the API URL with your actual API endpoint
-        let showInstance = Talkshoplive.Show()
         self.showResult = ""
         self.eventObject = nil
         self.eventResult = ""
@@ -224,20 +225,22 @@ struct ShowView: View {
             switch result {
             case .success(let show):
                 // Access properties of TSLShow directly
+                print("\n getDetails => ", show)
                 self.showObject = show
-                print("===========fetchShowData=======")
-                print(show)
                 // dump(show)
             case .failure(let error):
                 // Handle error case
-                self.showResult = "Error: \(error.localizedDescription)"
+                if case .SHOW_NOT_FOUND = error {
+                    self.showResult = "Error: \(error.localizedDescription)"
+                } else {
+                    self.showResult = "Error: \(error.localizedDescription)"
+                }
             }
         }
     }
     
     func fetchCurrentEvent() {
         // self.showInput = eventID
-        let showInstance = Talkshoplive.Show()
         self.eventResult = ""
         if (timer == nil) {
             self.showObject = nil
