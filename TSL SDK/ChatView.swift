@@ -13,6 +13,7 @@ struct ChatView: View {
     var eventID = "8WtAFFgRO1K0"
     @State private var chat: Talkshoplive.Chat? = nil
     @State private var result: String = ""
+    @State private var isGuest: Bool = false
 
     
     var body: some View {
@@ -44,6 +45,7 @@ struct ChatView: View {
             
             // Render Button
             Button("Create Token - Guest") {
+                result = ""
                 createTokenGuestUser()
             }
             .frame(width: 240)
@@ -54,6 +56,7 @@ struct ChatView: View {
             
             // Render Button
             Button("Create Token - Federated User") {
+                result = ""
                 createTokenFederatedUser()
             }
             .frame(width: 240)
@@ -63,7 +66,19 @@ struct ChatView: View {
             .cornerRadius(10)
             
             // Message Count
+            Button("Update User") {
+                result = ""
+                updateuser()
+            }
+            .frame(width: 240)
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.black)
+            .cornerRadius(10)
+            
+            // Message Count
             Button("Count Messages") {
+                result = ""
                 countMessages()
             }
             .frame(width: 240)
@@ -74,9 +89,6 @@ struct ChatView: View {
             
             // Render Token or User Id
             if (chat != nil) {
-                Text("Token successfully created!")
-                    .padding()
-                
                 // Show success
                 Text(result).padding()
             }
@@ -96,6 +108,7 @@ struct ChatView: View {
     }
     
     func createTokenGuestUser() {
+        isGuest = true
         let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSJ9.1g6lo38-PkYy9EyD4Teq_Nmi2pZYR1_EazuI-u-KISo"
         /*
          Payload to generate JWT Token for Guest User :
@@ -105,10 +118,17 @@ struct ChatView: View {
          "jti": "tWhBAwSTmXU6zyQK15Euyy==", // Unique Random string
          }
          */
-        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:true, showKey: showInput)
+        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:self.isGuest, showKey: showInput) {status,error in
+            if status {
+                self.result = "Token created!"
+            } else {
+                self.result = error?.localizedDescription ?? ""
+            }
+        }
     }
     
     func createTokenFederatedUser() {
+        isGuest = false
         /*
          Payload to generate JWT Token for Fedarated User:
          {
@@ -122,7 +142,13 @@ struct ChatView: View {
          }
          */
         let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.cUwgqLmLQJ_JV0vNzdUFNdPcBHk6XTf5GqGSArJSnms"
-        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest:false, showKey: showInput)
+        self.chat = Talkshoplive.Chat(jwtToken: token, isGuest: self.isGuest, showKey: showInput) {status,error in
+            if status {
+                self.result = "Token created!"
+            } else {
+                self.result = error?.localizedDescription ?? ""
+            }
+        }
     }
     
     func countMessages() {
@@ -137,6 +163,33 @@ struct ChatView: View {
 
             }
         })
+    }
+    
+    func updateuser() {
+        if isGuest {
+            //Upate to fedaratedUser
+            let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.cUwgqLmLQJ_JV0vNzdUFNdPcBHk6XTf5GqGSArJSnms"
+            self.chat?.updateUser(jwtToken: token, isGuest: false, completion: { status, error in
+                if status {
+                    self.isGuest = false
+                    self.result = "User updated!"
+                } else {
+                    self.result = error?.localizedDescription ?? ""
+                }
+            })
+
+        } else {
+            //Upate to Guest
+            let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSJ9.1g6lo38-PkYy9EyD4Teq_Nmi2pZYR1_EazuI-u-KISo"
+            self.chat?.updateUser(jwtToken: token, isGuest: true, completion: { status, error in
+                if status {
+                    self.isGuest = true
+                    self.result = "User updated!"
+                } else {
+                    self.result = error?.localizedDescription ?? ""
+                }
+            })
+        }
     }
     
 }
