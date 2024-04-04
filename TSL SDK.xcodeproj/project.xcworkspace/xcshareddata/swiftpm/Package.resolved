@@ -1,12 +1,21 @@
 {
   "pins" : [
     {
+      "identity" : "ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TalkShopLive/ios-sdk",
+      "state" : {
+        "branch" : "main",
+        "revision" : "819bb4073176a345a40c2b0c6302895a7372ec7d"
+      }
+    },
+    {
       "identity" : "swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pubnub/swift.git",
       "state" : {
-        "revision" : "d5c5083d5024ecb6d66ceb34c7322fc9049134ae",
-        "version" : "7.0.0"
+        "revision" : "c58d58e3761010289d395ab2530cb19f38255108",
+        "version" : "7.1.0"
       }
     }
   ],

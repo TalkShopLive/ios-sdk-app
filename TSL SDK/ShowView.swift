@@ -160,6 +160,7 @@ struct ShowView: View {
                             Text("status: \(eventStatus)")
                             Text("duration: \(eventObject?.duration ?? 0)")
                             Text("hlsPlaybackURL: \(eventObject?.hlsPlaybackUrl ?? "")")
+                            Text("hlsURL: \(eventObject?.hlsUrl ?? "NULL")")
                             Text("streamInCloud: \(eventObject?.streamInCloud ?? false ? "true" : "false")")
                             Text("totalViews: \(eventObject?.totalViews ?? 0)")
 
@@ -176,7 +177,7 @@ struct ShowView: View {
                             } else if (eventStatus == "transcoding") {
                                 Text("Transcoding - Show Transcoding text...")
                             } else if (eventStatus == "finished") {
-                                Text("Show has finished - (hlsUrl for playback): \(showObject?.hlsUrl ?? "NULL")")
+                                Text("Show has finished - (hlsUrl for playback): \(eventObject?.hlsUrl ?? "NULL")")
                             }
                             
                             Text("streamInCloud: \(eventObject?.streamInCloud ?? false ? "true" : "false")")
