@@ -698,7 +698,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
 			requirement = {
-				branch = main;
+				branch = development;
 				kind = branch;
 			};
 		};

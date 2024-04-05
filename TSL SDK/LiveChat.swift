@@ -232,6 +232,11 @@ class LiveChatModel: ObservableObject, ChatDelegate {
         self.message = message
         dump(message)
     }
+    
+    func onStatusChanged(error: Talkshoplive.APIClientError) {
+        //If token revoked , handle error.
+    }
+    
 }
 
 struct ChatBubble: View {
