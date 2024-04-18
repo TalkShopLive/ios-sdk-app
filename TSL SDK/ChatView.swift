@@ -103,7 +103,9 @@ struct ChatView: View {
     
     func initializeSDK() {
         // Replace the API URL with your actual API endpoint
-        let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3",debugMode: true,testMode: true)
+        let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_6c20795f5fae8749b78cbb0e6172e931",debugMode: true,testMode: false) //prod
+
+//        let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3",debugMode: true,testMode: true)
         print(TSL)
     }
     
@@ -141,7 +143,9 @@ struct ChatView: View {
              }
          }
          */
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.cUwgqLmLQJ_JV0vNzdUFNdPcBHk6XTf5GqGSArJSnms"
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfNmMyMDc5NWY1ZmFlODc0OWI3OGNiYjBlNjE3MmU5MzEiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBdTk5bVhpaXp5UUsxNUUwMHk9PSIsInVzZXIiOnsiaWQiOiIxMDg5OTAwIiwibmFtZSI6Ik1heXVyaSJ9fQ.keXq7s_npUwoC_xCd8hJorZp_bHMkKtoABemnUtCbu4" // production
+
+//        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZGtfMmVhMjFkZTE5Y2M4YmM1ZTg2NDBjN2IyMjdmZWYyZjMiLCJleHAiOjE3OTkyNjc3NDYsImp0aSI6InRXaEJBd1NUbVhVNnp5UUsxNUV1eXk9PSIsInVzZXIiOnsiaWQiOiIxMjMiLCJuYW1lIjoiTWF5dXJpIn19.1mox9tZ_rbetPaNbSJF75ABw-CLkcy3nykVV52QBxqw"
         self.chat = Talkshoplive.Chat(jwtToken: token, isGuest: self.isGuest, showKey: showInput) {status,error in
             if status {
                 self.result = "Token created!"

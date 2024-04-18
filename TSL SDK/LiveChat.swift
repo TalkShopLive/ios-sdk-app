@@ -8,12 +8,13 @@
 import SwiftUI
 import Talkshoplive
 
-var defaultShowID = "8WtAFFgRO1K0"
+var defaultShowID = "2RfJXNuYTm0u"
 struct LiveChat: View {
     @State var messages: [Talkshoplive.MessageBase] = []
     @State private var showInput: String = defaultShowID
     @State private var newMessage: String = ""
     @State private var scrollToBottom = false
+    @State private var loadMoreData = false
     @State private var chat: Talkshoplive.Chat? = nil
     @StateObject private var viewModel = LiveChatModel()
     var myUserId = "federated_user.walmart.123"
@@ -45,17 +46,29 @@ struct LiveChat: View {
                         } else {
                             chatBubble
                         }
+                        
+                        // Detect when the last item is displayed and call loadMoreData if necessary
+                        if index == 0 {
+                            chatBubble.onAppear {
+                                // Check if there's more data to load
+                                if loadMoreData {
+                                    fetchMessageHistory(isLoadMore: true)
+                                }
+                            }
+                        }
                     }
                 }
                 .contentShape(Rectangle()) // Enable interaction with the List
                 .listStyle(PlainListStyle()) // Remove default inset
                 
                 .onChange(of: messages.count) { _ in
-                    // Scroll to the last index when the number of messages changes
-                    scrollView.scrollTo(messages.count - 1, anchor: .bottom)
+                    if self.scrollToBottom {
+                        // Scroll to the last index when the number of messages changes
+                        scrollView.scrollTo(messages.count - 1, anchor: .bottom)
+                    }
                 }
-                
             }
+            
             
             .onReceive(viewModel.$message, perform: { newMessage in
                 if let newMessage = newMessage {
@@ -125,23 +138,6 @@ struct LiveChat: View {
         }
     }
     
-    private func deleteMessage(at index: Int) {
-//           messages.remove(at: index)
-        let message = self.messages[index]
-        if let timetoken = message.published {
-            print("TimeToken",timetoken)
-           
-            self.chat?.deleteMessage(timeToken: timetoken, completion: { status, error in
-                if status {
-//                    self.messages.remove(at: index)
-                    print("APP : Message deleted Successfully", status)
-                } else {
-                    print("APP : Error", error?.localizedDescription)
-                }
-            })
-        }
-    }
-    
     func initChat() {
 //         initChatGuest()
         initChatUser()
@@ -172,6 +168,35 @@ struct LiveChat: View {
         self.chat?.delegate = viewModel
     }
     
+    func fetchMessageHistory(isLoadMore: Bool = false) {
+        print(self.messages)
+//        self.nextPage = MessagePage(start: 17086127387121323, limit: 25)
+        self.chat?.getChatMessages(limit: 30,start: (nextPage != nil ? nextPage?.start : nil) ) { result in
+            switch result {
+            case let .success((messageArray,page)):
+                print("Message count", messageArray.count)
+//                print("History", messageArray.count)
+                if !isLoadMore {
+                    self.scrollToBottom = true
+                } else {
+                    self.scrollToBottom = false
+                }
+                // Handle the successful result with the message array and optional nextPage
+//                          print("Received chat messages:", messageArray)
+                //          print("Received next page:", page)
+                if messageArray.count > 0 && page != nil{
+                    self.messages.insert(contentsOf: messageArray, at: 0)
+                    loadMoreData = true
+                } else {
+                    loadMoreData = false
+                }
+                nextPage = page
+            case .failure(let error):
+                print("APP : Error fetching chat messages: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     private func sendMessage() {
         if (!newMessage.isEmpty) {
             self.chat?.sendMessage(message: newMessage, completion: {status, error in
@@ -189,30 +214,28 @@ struct LiveChat: View {
         }
     }
     
+    private func deleteMessage(at index: Int) {
+//           messages.remove(at: index)
+        let message = self.messages[index]
+        if let timetoken = message.published {
+            print("TimeToken",timetoken)
+           
+            self.chat?.deleteMessage(timeToken: timetoken, completion: { status, error in
+                if status {
+//                    self.messages.remove(at: index)
+                    print("APP : Message deleted Successfully", status)
+                } else {
+//                    print("APP : Error", error?.localizedDescription)
+                }
+            })
+        }
+    }
+    
+    
     func showSuccess() {
         // self.result = "Message sent!"
         DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
             // self.result = ""
-        }
-    }
-    
-    func fetchMessageHistory(isLoadMore: Bool = false) {
-        print("Page---", nextPage)
-        self.chat?.getChatMessages(limit: 25,start: (nextPage != nil ? nextPage?.start : nil) ) { result in
-            switch result {
-            case let .success((messageArray,page)):
-//                print("History", messageArray)
-                if !isLoadMore {
-                    self.scrollToBottom = true
-                }
-                // Handle the successful result with the message array and optional nextPage
-//                          print("Received chat messages:", messageArray)
-                //          print("Received next page:", page)
-                self.messages.insert(contentsOf: messageArray, at: 0)
-                nextPage = page
-            case .failure(let error):
-                print("APP : Error fetching chat messages: \(error.localizedDescription)")
-            }
         }
     }
 }
@@ -222,16 +245,43 @@ class LiveChatModel: ObservableObject, ChatDelegate {
 
     
     func onDeleteMessage(_ message: Talkshoplive.MessageBase) {
-        print("APP : Message Removed => ", message)
+        print("APP : Message Removed => ")//, message)
         self.message = message
         dump(message)
     }
     
     func onNewMessage(_ message: Talkshoplive.MessageBase) {
-        print("APP : Recieved New Message => ", message)
+        print("APP : Recieved New Message => ")//, message)
         self.message = message
         dump(message)
     }
+    
+    func onStatusChanged(error: Talkshoplive.APIClientError) {
+        //If token revoked , handle error.
+        print("APP : onStatusChanged")
+
+        //1. Using switch case
+        switch error {
+        case .PERMISSION_DENIED:
+            print("Permission Denied")
+        case .CHAT_TIMEOUT:
+            print("Chat Timeout")
+        default:
+            break
+        }
+        
+        //2. Using if condition
+        if case .PERMISSION_DENIED = error {
+            print("Permission Denied")
+            // Additional handling for token expiration
+        } else if case .CHAT_TIMEOUT = error {
+            print("Chat Timeout")
+            // Additional handling for permission denied
+        } else {
+            print(error.localizedDescription)
+        }
+    }
+    
 }
 
 struct ChatBubble: View {
