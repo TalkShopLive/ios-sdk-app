@@ -8,16 +8,18 @@
 import SwiftUI
 import Talkshoplive
 
-var defaultShowID = "2RfJXNuYTm0u"
+var defaultShowID = "eQUkD8M0cV3G"
+
+//var defultShowID =  "ZKl4cBEzfV_A" // threaded message
 struct LiveChat: View {
     @State var messages: [Talkshoplive.MessageBase] = []
     @State private var showInput: String = defaultShowID
     @State private var newMessage: String = ""
     @State private var scrollToBottom = false
-    @State private var loadMoreData = false
+    @State private var loadMoreData = true
     @State private var chat: Talkshoplive.Chat? = nil
     @StateObject private var viewModel = LiveChatModel()
-    var myUserId = "federated_user.walmart.123"
+    var myUserId = "federated_user.walmart.1089900"
     @State private var nextPage : Talkshoplive.MessagePage?
     
     var body: some View {
@@ -169,32 +171,31 @@ struct LiveChat: View {
     }
     
     func fetchMessageHistory(isLoadMore: Bool = false) {
-        print(self.messages)
-//        self.nextPage = MessagePage(start: 17086127387121323, limit: 25)
-        self.chat?.getChatMessages(limit: 30,start: (nextPage != nil ? nextPage?.start : nil) ) { result in
-            switch result {
-            case let .success((messageArray,page)):
-                print("Message count", messageArray.count)
-//                print("History", messageArray.count)
-                if !isLoadMore {
-                    self.scrollToBottom = true
-                } else {
-                    self.scrollToBottom = false
+        if loadMoreData {
+            self.chat?.getChatMessages(limit: 30,start: (nextPage != nil ? nextPage?.start : nil) ) { result in
+                switch result {
+                case let .success((messageArray,page)):
+                    if !isLoadMore {
+                        self.scrollToBottom = true
+                    } else {
+                        self.scrollToBottom = false
+                    }
+                    // Handle the successful result with the message array and optional nextPage
+    //                          print("Received chat messages:", messageArray)
+                    //          print("Received next page:", page)
+                    if messageArray.count > 0 && page != nil{
+                        self.messages.insert(contentsOf: messageArray, at: 0)
+                        loadMoreData = true
+                    } else {
+                        loadMoreData = false
+                    }
+                    nextPage = page
+                case .failure(let error):
+                    print("APP : Error fetching chat messages: \(error.localizedDescription)")
                 }
-                // Handle the successful result with the message array and optional nextPage
-//                          print("Received chat messages:", messageArray)
-                //          print("Received next page:", page)
-                if messageArray.count > 0 && page != nil{
-                    self.messages.insert(contentsOf: messageArray, at: 0)
-                    loadMoreData = true
-                } else {
-                    loadMoreData = false
-                }
-                nextPage = page
-            case .failure(let error):
-                print("APP : Error fetching chat messages: \(error.localizedDescription)")
             }
         }
+
     }
     
     private func sendMessage() {
@@ -210,12 +211,10 @@ struct LiveChat: View {
             })
             newMessage = ""
             scrollToBottom = true
-            // showSuccess()
         }
     }
     
     private func deleteMessage(at index: Int) {
-//           messages.remove(at: index)
         let message = self.messages[index]
         if let timetoken = message.published {
             print("TimeToken",timetoken)
@@ -228,14 +227,6 @@ struct LiveChat: View {
 //                    print("APP : Error", error?.localizedDescription)
                 }
             })
-        }
-    }
-    
-    
-    func showSuccess() {
-        // self.result = "Message sent!"
-        DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
-            // self.result = ""
         }
     }
 }
@@ -253,29 +244,34 @@ class LiveChatModel: ObservableObject, ChatDelegate {
     func onNewMessage(_ message: Talkshoplive.MessageBase) {
         print("APP : Recieved New Message => ")//, message)
         self.message = message
+        //If it's threaded message, it will have original message details
+        if let originalMessage = message.payload?.original?.message {
+            print("APP : Original message's sender details", originalMessage.sender ?? "")
+            print("APP : Original message details", originalMessage.text ?? "")
+        }
         dump(message)
     }
     
-    func onStatusChanged(error: Talkshoplive.APIClientError) {
+    func onStatusChange(error: Talkshoplive.APIClientError) {
         //If token revoked , handle error.
         print("APP : onStatusChanged")
 
         //1. Using switch case
         switch error {
         case .PERMISSION_DENIED:
-            print("Permission Denied")
+            print("APP : Permission Denied")
         case .CHAT_TIMEOUT:
-            print("Chat Timeout")
+            print("APP : Chat Timeout")
         default:
             break
         }
         
         //2. Using if condition
         if case .PERMISSION_DENIED = error {
-            print("Permission Denied")
+            print("APP : Permission Denied")
             // Additional handling for token expiration
         } else if case .CHAT_TIMEOUT = error {
-            print("Chat Timeout")
+            print("APP : Chat Timeout")
             // Additional handling for permission denied
         } else {
             print(error.localizedDescription)
@@ -293,11 +289,32 @@ struct ChatBubble: View {
     
             Spacer(minLength: 0)
             
+            let isThreaded = (message.payload?.original != nil)
             VStack(alignment: isMe ? .trailing : .leading, spacing: 5) {
+                //START : Threaded message
+                if let originalMessage = message.payload?.original?.message {
+                    VStack(alignment: .leading, spacing: 5) {
+                        if let senderName = originalMessage.sender?.name, !senderName.isEmpty {
+                            Text(senderName)
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                        Text(originalMessage.text ?? "")
+                            .padding()
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : .leading)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                //END : Threaded message
+                
                 if let senderName = message.payload?.sender?.name, !senderName.isEmpty {
                     Text(senderName)
                         .font(.caption)
                         .foregroundColor(.gray)
+                        .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment:isMe ? .trailing : (isThreaded ? .center : .leading))
                 }
                 
                 Text(message.payload?.text ?? "")
@@ -305,7 +322,8 @@ struct ChatBubble: View {
                     .background(isMe ? Color.blue : Color.gray)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : .leading)
+                    .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : (isThreaded ? .center : .leading))
+               
             }
             .frame(maxWidth: .infinity, alignment: isMe ? .trailing : .leading) // Expand VStack to fill the width
 

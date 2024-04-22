@@ -669,7 +669,7 @@
 			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
 			requirement = {
 				kind = revision;
-				revision = ca3163307af0ad9570855cbdfabba46871f8a5d0;
+				revision = 422c5d7c94f38422fcf669f1b39912e73d7b34b0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
