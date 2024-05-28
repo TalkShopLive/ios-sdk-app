@@ -396,22 +396,22 @@ struct ChatBubble: View {
             let isThreaded = (message.payload?.original != nil)
             VStack(alignment: isMe ? .trailing : .leading, spacing: 5) {
                 //START : Threaded message
-//                if let originalMessage = message.payload?.original?.message {
-//                    VStack(alignment: .leading, spacing: 5) {
-//                        if let senderName = originalMessage.sender?.name, !senderName.isEmpty {
-//                            Text(senderName)
-//                                .font(.caption)
-//                                .foregroundColor(.gray)
-//                        }
-//                        Text(originalMessage.text ?? "")
-//                            .padding()
-//                            .background(.green)
-//                            .foregroundColor(.white)
-//                            .cornerRadius(10)
-//                            .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : .leading)
-//                    }
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-//                }
+                if let originalMessage = message.payload?.original?.message {
+                    VStack(alignment: .leading, spacing: 5) {
+                        if let senderName = originalMessage.sender?.name, !senderName.isEmpty {
+                            Text(senderName)
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                        Text(originalMessage.text ?? "")
+                            .padding()
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : .leading)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
                 //END : Threaded message
                 
                 if let senderName = message.payload?.sender?.name, !senderName.isEmpty {
