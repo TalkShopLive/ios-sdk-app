@@ -7,7 +7,7 @@
 import SwiftUI
 import Talkshoplive
 
-var showID = "9rJ2WSDlxUw_"
+var showID = "8H41J85DaZ-M"
 var eventID = "8WtAFFgRO1K0"
 struct ShowView: View {
     @State private var timer: Timer?
@@ -18,6 +18,7 @@ struct ShowView: View {
     @State private var eventInput: String = ""
     @State private var showObject : Talkshoplive.ShowData? = nil
     @State private var eventObject : Talkshoplive.EventData? = nil
+    @State private var products : [ProductData]? = nil
     let showInstance = Talkshoplive.Show()
 
     
@@ -101,6 +102,16 @@ struct ShowView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 
+                // Fetch current event
+                Button("Fetch Products") {
+                    fetchProducts()
+                }
+                .frame(width: 240)
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.blue)
+                .cornerRadius(10)
+                
                 // Start Polling
                 Button(timer == nil ? "Start Polling" : "Stop Polling") {
                     if (timer == nil) {
@@ -136,6 +147,7 @@ struct ShowView: View {
                         Text("channelLogo: \(showObject?.channelLogo ?? "NULL")")
                         Text("channelName: \(showObject?.channelName ?? "NULL")")
                         Text("trailerDuration: \(showObject?.trailerDuration ?? 0)")
+//                        Text("in_show_product_ids: \(showObject?.productsIds ?? [])")
                         
 
                     }.frame(width: 300).multilineTextAlignment(.leading)
@@ -186,6 +198,34 @@ struct ShowView: View {
                     }.frame(width: 300).multilineTextAlignment(.leading)
                 }
                 
+                if self.products != nil {
+                    if let products = self.products, products.count > 0 {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Spacer()
+                            Text("Method: show.getProducts()")
+                            
+                                ForEach(products.indices, id: \.self) { index in
+                                    let product = products[index]
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text("----- Product \(index) ----- \n")
+                                        Text("ID: \(product.id ?? 0)")
+                                        Text("SKU: \(product.sku ?? "NULL")")
+                                        Text("Description: \(product.description ?? "NULL")")
+                                        Text("Product Image: \(product.image ?? "NULL")")
+                                        Text("Product Source: \(product.productSource ?? "NULL")")
+                                        Text("Affiliate link: \(product.affiliateLink ?? "NULL")")
+                                    }
+                                    .padding(5)
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(8)
+                                }
+                        }
+                    } else {
+                        Text("No products available")
+                    }
+
+                }
+
                 // Show Error
                 if (eventResult != "") {
                     Text(eventResult)
@@ -257,6 +297,34 @@ struct ShowView: View {
             case .failure(let error):
                 // Handle error case
                 self.eventResult = "Error: \(error.localizedDescription)"
+                
+            }
+        }
+    }
+    
+    func fetchProducts() {
+        self.showResult = ""
+        self.showObject = nil
+        self.eventObject = nil
+        self.products = nil
+        self.showInstance.getProducts(showKey: showInput) { result in
+            switch result {
+            case .success(let products):
+                // Access properties of TSLShow directly
+                self.products = products
+                print("===========fetchProducts=======")
+                
+                for i in products {
+//                    print("Product Details", i)
+                    if let variants = i.variants, variants.count > 0 {
+                        for j in variants {
+//                            print("SKU", (i.sku ?? ""))
+                        }
+                    }
+                }
+            case .failure(let error):
+                // Handle error case
+                self.showResult = "Error: \(error.localizedDescription)"
                 
             }
         }
