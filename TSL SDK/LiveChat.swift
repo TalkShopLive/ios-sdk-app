@@ -8,10 +8,13 @@
 import SwiftUI
 import Talkshoplive
 
-var defaultShowID = "eQUkD8M0cV3G"
+var defaultShowID = "8WtAFFgRO1K0"
+
 
 //var defultShowID =  "ZKl4cBEzfV_A" // threaded message
 struct LiveChat: View {
+    @State private var refreshCount = 0 // Counter to track refreshes
+
     @State var messages: [Talkshoplive.MessageBase] = []
     @State private var showInput: String = defaultShowID
     @State private var newMessage: String = ""
@@ -19,7 +22,7 @@ struct LiveChat: View {
     @State private var loadMoreData = true
     @State private var chat: Talkshoplive.Chat? = nil
     @StateObject private var viewModel = LiveChatModel()
-    var myUserId = "federated_user.walmart.1089900"
+    var myUserId = "federated_user.walmart.123"
     @State private var nextPage : Talkshoplive.MessagePage?
     
     var body: some View {
@@ -28,36 +31,49 @@ struct LiveChat: View {
                 
                 List {
                     ForEach(messages.indices, id: \.self) { index in
+                        
                         let isMe = (messages[index].payload?.sender?.id == myUserId) ? true : false
-                        let chatBubble = ChatBubble(message: messages[index], isMe: isMe)
+                                    
+                        var isLiked: Bool = messages[index].actions?.contains(where: { action in
+                            (action.publisher ?? "") == myUserId
+                        }) ?? false
+                        
+                        ChatBubble(message: messages[index], isMe: isMe, actions: messages[index].actions ?? [MessageAction]())
                             .frame(maxWidth: .infinity) // Allow ChatBubble to expand to full width
                             .contentShape(Rectangle()) // Enable interaction with the List
                             .listRowSeparator(.hidden) // Hide the separator line
-                        
-                        if isMe {
-                            chatBubble.swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button {
-                                    // Perform action when the button is tapped
-                                    // For example, delete the message
-                                    self.deleteMessage(at: index)
-                                } label: {
-                                    Image(systemName: "trash")
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                if isMe {
+                                    Button {
+                                        // Perform action when the button is tapped
+                                        // For example, delete the message
+                                        self.deleteMessage(at: index)
+                                    } label: {
+                                        Image(systemName: "trash")
+                                    }
+                                    .tint(.red)
                                 }
-                                .tint(.red)
+                                
+                                Button {
+                                    if isLiked {
+                                        self.UnLikeComment(at: index)
+                                    } else {
+                                        self.LikeComment(at: index)
+                                    }
+                                    isLiked.toggle()
+                                } label: {
+                                    Image(systemName: isLiked ? "heart.fill" : "heart")
+
+                                }
+                                .tint(isLiked ? .blue : .gray) // Adjust tint color based on isLiked state
+
                             }
-                        } else {
-                            chatBubble
-                        }
-                        
-                        // Detect when the last item is displayed and call loadMoreData if necessary
-                        if index == 0 {
-                            chatBubble.onAppear {
-                                // Check if there's more data to load
-                                if loadMoreData {
+                            .onAppear {
+                                // Detect when the last item is displayed and call loadMoreData if necessary
+                                if index == 0 && loadMoreData {
                                     fetchMessageHistory(isLoadMore: true)
                                 }
                             }
-                        }
                     }
                 }
                 .contentShape(Rectangle()) // Enable interaction with the List
@@ -68,6 +84,7 @@ struct LiveChat: View {
                         // Scroll to the last index when the number of messages changes
                         scrollView.scrollTo(messages.count - 1, anchor: .bottom)
                     }
+                    refreshCount += 1
                 }
             }
             
@@ -85,6 +102,34 @@ struct LiveChat: View {
                     }
                 }
                 scrollToBottom = true
+            })
+            
+            .onReceive(viewModel.$messageAction, perform: { messageAction in
+                if let newMessageAction = messageAction {
+                    print("\n APP :: Like Comment => newMessageAction", newMessageAction)
+                    if let messageIndex =  self.messages.firstIndex(where: { message in
+                        (message.published ?? "") == (newMessageAction.messageTimetoken ?? "")
+                    }) {
+                        self.messages[messageIndex].actions?.append(newMessageAction)
+                    }
+                }
+            })
+            
+            .onReceive(viewModel.$removedMessageAction, perform: { messageAction in
+                if let removedMessageAction = messageAction {
+                    print("\n APP :: Unlike Comment => removedMessageAction", removedMessageAction)
+                    if let messageIndex =  self.messages.firstIndex(where: { message in
+                        (message.published ?? "") == (removedMessageAction.messageTimetoken ?? "")
+                    }) {
+                        if let actionsIndex =  self.messages[messageIndex].actions?.firstIndex(where: { action in
+                            (action.actionTimetoken ?? 0) == (removedMessageAction.actionTimetoken ?? 0)
+                        }) {
+                            self.messages[messageIndex].actions?.remove(at: actionsIndex)
+                        }
+                    }
+                    
+                    
+                }
             })
             
             HStack {
@@ -105,6 +150,8 @@ struct LiveChat: View {
                 .foregroundColor(.white)
                 .background(Color.blue)
                 .cornerRadius(10)
+                
+                Text("Refresh Count: \(refreshCount)")
             }
             .padding(.trailing)
             
@@ -181,7 +228,7 @@ struct LiveChat: View {
                         self.scrollToBottom = false
                     }
                     // Handle the successful result with the message array and optional nextPage
-    //                          print("Received chat messages:", messageArray)
+//                              print("Received chat messages:", messageArray)
                     //          print("Received next page:", page)
                     if messageArray.count > 0 && page != nil{
                         self.messages.insert(contentsOf: messageArray, at: 0)
@@ -229,10 +276,55 @@ struct LiveChat: View {
             })
         }
     }
+    
+    private func LikeComment(at index: Int) {
+        let message = self.messages[index]
+        if let timetoken = message.published {
+            print("APP :: Like Comment => TimeToken",timetoken)
+           
+            self.chat?.likeComment(timeToken: timetoken, completion: { status, error in
+                if status {
+                    print("APP : Liked comment Successfully", status)
+                } else {
+                    print("APP : Liked comment Error", error?.localizedDescription ?? "")
+                }
+            })
+        }
+    }
+    
+    private func UnLikeComment(at index: Int) {
+        let message = self.messages[index]
+        var actionTimetoken : Int?
+        
+        if let actionsIndex =  self.messages[index].actions?.firstIndex(where: { action in
+            (action.publisher ?? "") == myUserId
+        }) {
+            actionTimetoken = message.actions?[actionsIndex].actionTimetoken
+        }
+        if let timetoken = message.published, let actionTimetoken = actionTimetoken {
+            print("APP :: Unlike Comment => TimeToken",timetoken, "actionTimeToken", actionTimetoken)
+
+            self.chat?.UnlikeComment(timeToken: timetoken, actionTimeToken: actionTimetoken, completion: { status, error in
+                if status {
+                    if let actionsIndex =  self.messages[index].actions?.firstIndex(where: { action in
+                        (action.actionTimetoken ?? 0) == actionTimetoken
+                    }) {
+                        self.messages[index].actions?.remove(at: actionsIndex)
+                    }
+                    print("APP : Unliked comment Successfully", status)
+                } else {
+                    print("APP : Unliked comment Error", error?.localizedDescription ?? "")
+                }
+            })
+        }
+    }
 }
 
 class LiveChatModel: ObservableObject, ChatDelegate {
+    
     @Published var message: MessageBase?
+    @Published var messageAction: MessageAction?
+    @Published var removedMessageAction: MessageAction?
 
     
     func onDeleteMessage(_ message: Talkshoplive.MessageBase) {
@@ -254,13 +346,15 @@ class LiveChatModel: ObservableObject, ChatDelegate {
     
     func onStatusChange(error: Talkshoplive.APIClientError) {
         //If token revoked , handle error.
-        print("APP : onStatusChanged")
+        print("APP : onStatusChanged Listener")
 
         //1. Using switch case
         switch error {
         case .PERMISSION_DENIED:
             print("APP : Permission Denied")
         case .CHAT_TIMEOUT:
+            print("APP : Chat Timeout")
+        case .CHAT_CONNECTION_ERROR:
             print("APP : Chat Timeout")
         default:
             break
@@ -277,13 +371,23 @@ class LiveChatModel: ObservableObject, ChatDelegate {
             print(error.localizedDescription)
         }
     }
+    func onLikeComment(_ messageAction: Talkshoplive.MessageAction) {
+        print("APP :: Like Comment => Listener")
+        self.messageAction = messageAction
+    }
+    func onUnlikeComment(_ messageAction: MessageAction) {
+        print("APP :: Unlike Comment => Listener")
+        self.removedMessageAction = messageAction
+    }
     
 }
 
 struct ChatBubble: View {
+    
     var message: Talkshoplive.MessageBase // Replace YourMessageType with the actual type of your messages
     var isMe: Bool = false // Add a property to determine if the message is sent by the user
-    
+    var actions: [MessageAction] // Replace `Action` with the actual type of your actions
+
     var body: some View {
         HStack(spacing: 0) {
     
@@ -323,6 +427,18 @@ struct ChatBubble: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
                     .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : (isThreaded ? .center : .leading))
+                
+                // Print or display the actions
+                   if !actions.isEmpty {
+                       VStack(alignment: .leading) {
+                           ForEach(actions.indices, id: \.self) { index in
+                               Text("Action by: \(actions[index].publisher ?? "Unknown")") // Replace with actual property names
+                                   .font(.footnote)
+                                   .foregroundColor(.secondary)
+                           }
+                       }
+                       .frame(maxWidth: .infinity, alignment: isMe ? .trailing : .leading)
+                   }
                
             }
             .frame(maxWidth: .infinity, alignment: isMe ? .trailing : .leading) // Expand VStack to fill the width
@@ -330,6 +446,16 @@ struct ChatBubble: View {
             Spacer(minLength: 0)
         }
         .padding(.vertical, 5)
+    }
+    
+    struct LikeButtonStyle: ButtonStyle {
+        var isLiked: Bool
+
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .imageScale(.large)
+                .foregroundColor(isLiked ? .red : .gray)
+        }
     }
 }
 
