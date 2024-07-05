@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Talkshoplive
+import GiphyUISDK
 
 var defaultShowID = "8WtAFFgRO1K0"
 
@@ -21,9 +22,16 @@ struct LiveChat: View {
     @State private var scrollToBottom = false
     @State private var loadMoreData = true
     @State private var chat: Talkshoplive.Chat? = nil
-    @StateObject private var viewModel = LiveChatModel()
+    @StateObject private var viewModel = ChatViewModel()
     var myUserId = "federated_user.walmart.123"
     @State private var nextPage : Talkshoplive.MessagePage?
+    
+    //Giphy
+    @State private var isShowingGiphyPicker = false
+    
+    init() {
+        Giphy.configure(apiKey:"w2cYrP7vfThDdKlcfPsHgQ26cQf6E9mg")
+    }
     
     var body: some View {
         VStack {
@@ -132,6 +140,12 @@ struct LiveChat: View {
                 }
             })
             
+            .onReceive(viewModel.$selectedGifData, perform: { gifData in
+                if let gifData = gifData {
+                    print("\n LiveChat : GifData recieved")
+                    self.sendGif(gifData: gifData)
+                }
+            })
             HStack {
                 TextField("Type a message", text: $newMessage)
                     .padding()
@@ -151,9 +165,20 @@ struct LiveChat: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 
-                Text("Refresh Count: \(refreshCount)")
+                Button("gif") {
+                    isShowingGiphyPicker = true
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                
+//                Text("Refresh Count: \(refreshCount)")
             }
             .padding(.trailing)
+            .sheet(isPresented: $isShowingGiphyPicker) {
+                GiphyPicker(delegate: viewModel)
+            }
             
         }
         
@@ -165,12 +190,8 @@ struct LiveChat: View {
         
         .onDisappear() {
             self.chat?.clean()
-        }
-        
-        
+        }        
     }
-    
-    
     
     func initializeSDK() {
         // Assuming SDK initialization is asynchronous
@@ -261,6 +282,22 @@ struct LiveChat: View {
         }
     }
     
+    private func sendGif(gifData:GPHMedia) {
+            let id = gifData.id
+            let aspectRatio : Double = Double((gifData.images?.original?.width ?? 0) / (gifData.images?.original?.height  ?? 0))
+            self.chat?.sendMessage(message: id, type: .giphy, aspectRatio: aspectRatio, completion: {status, error in
+                if status {
+                    print("APP : GIF Send Successfully", status)
+                } else {
+                    if let error = error {
+                        print("APP : GIF Error", error.localizedDescription)
+                    }
+                }
+            })
+            newMessage = ""
+            scrollToBottom = true
+    }
+    
     private func deleteMessage(at index: Int) {
         let message = self.messages[index]
         if let timetoken = message.published {
@@ -319,148 +356,6 @@ struct LiveChat: View {
         }
     }
 }
-
-class LiveChatModel: ObservableObject, ChatDelegate {
-    
-    @Published var message: MessageBase?
-    @Published var messageAction: MessageAction?
-    @Published var removedMessageAction: MessageAction?
-
-    
-    func onDeleteMessage(_ message: Talkshoplive.MessageBase) {
-        print("APP : Message Removed => ")//, message)
-        self.message = message
-        dump(message)
-    }
-    
-    func onNewMessage(_ message: Talkshoplive.MessageBase) {
-        print("APP : Recieved New Message => ")//, message)
-        self.message = message
-        //If it's threaded message, it will have original message details
-        if let originalMessage = message.payload?.original?.message {
-            print("APP : Original message's sender details", originalMessage.sender ?? "")
-            print("APP : Original message details", originalMessage.text ?? "")
-        }
-        dump(message)
-    }
-    
-    func onStatusChange(error: Talkshoplive.APIClientError) {
-        //If token revoked , handle error.
-        print("APP : onStatusChanged Listener")
-
-        //1. Using switch case
-        switch error {
-        case .PERMISSION_DENIED:
-            print("APP : Permission Denied")
-        case .CHAT_TIMEOUT:
-            print("APP : Chat Timeout")
-        case .CHAT_CONNECTION_ERROR:
-            print("APP : Chat Timeout")
-        default:
-            break
-        }
-        
-        //2. Using if condition
-        if case .PERMISSION_DENIED = error {
-            print("APP : Permission Denied")
-            // Additional handling for token expiration
-        } else if case .CHAT_TIMEOUT = error {
-            print("APP : Chat Timeout")
-            // Additional handling for permission denied
-        } else {
-            print(error.localizedDescription)
-        }
-    }
-    func onLikeComment(_ messageAction: Talkshoplive.MessageAction) {
-        print("APP :: Like Comment => Listener")
-        self.messageAction = messageAction
-    }
-    func onUnlikeComment(_ messageAction: MessageAction) {
-        print("APP :: Unlike Comment => Listener")
-        self.removedMessageAction = messageAction
-    }
-    
-}
-
-struct ChatBubble: View {
-    
-    var message: Talkshoplive.MessageBase // Replace YourMessageType with the actual type of your messages
-    var isMe: Bool = false // Add a property to determine if the message is sent by the user
-    var actions: [MessageAction] // Replace `Action` with the actual type of your actions
-
-    var body: some View {
-        HStack(spacing: 0) {
-    
-            Spacer(minLength: 0)
-            
-            let isThreaded = (message.payload?.original != nil)
-            VStack(alignment: isMe ? .trailing : .leading, spacing: 5) {
-                //START : Threaded message
-                if let originalMessage = message.payload?.original?.message {
-                    VStack(alignment: .leading, spacing: 5) {
-                        if let senderName = originalMessage.sender?.name, !senderName.isEmpty {
-                            Text(senderName)
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                        }
-                        Text(originalMessage.text ?? "")
-                            .padding()
-                            .background(.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : .leading)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                //END : Threaded message
-                
-                if let senderName = message.payload?.sender?.name, !senderName.isEmpty {
-                    Text(senderName)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment:isMe ? .trailing : (isThreaded ? .center : .leading))
-                }
-                
-                Text(message.payload?.text ?? "")
-                    .padding()
-                    .background(isMe ? Color.blue : Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: isMe ? .trailing : (isThreaded ? .center : .leading))
-                
-                // Print or display the actions
-                   if !actions.isEmpty {
-                       VStack(alignment: .leading) {
-                           ForEach(actions.indices, id: \.self) { index in
-                               Text("Action by: \(actions[index].publisher ?? "Unknown")") // Replace with actual property names
-                                   .font(.footnote)
-                                   .foregroundColor(.secondary)
-                           }
-                       }
-                       .frame(maxWidth: .infinity, alignment: isMe ? .trailing : .leading)
-                   }
-               
-            }
-            .frame(maxWidth: .infinity, alignment: isMe ? .trailing : .leading) // Expand VStack to fill the width
-
-            Spacer(minLength: 0)
-        }
-        .padding(.vertical, 5)
-    }
-    
-    struct LikeButtonStyle: ButtonStyle {
-        var isLiked: Bool
-
-        func makeBody(configuration: Configuration) -> some View {
-            configuration.label
-                .imageScale(.large)
-                .foregroundColor(isLiked ? .red : .gray)
-        }
-    }
-}
-
-
-
 
 struct LiveChat_Previews: PreviewProvider {
     static var previews: some View {
