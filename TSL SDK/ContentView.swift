@@ -75,8 +75,23 @@ struct ContentView: View {
                         .cornerRadius(8)
                 }
                 .navigationTitle("SDK View")
+                                
+                // User Class Implementation
+                NavigationLink(destination: HomeView()) {
+                    Text("Shows UI Enhancement")
+                        .buttonStyle(.borderedProminent)
+                        .frame(width: 240)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                        .background(Color.orange)
+                        .foregroundColor(.black)
+                        .cornerRadius(8)
+                }
+                .navigationTitle("Upcoming Shows")
+                
             }
         }.colorScheme(.light)
+
     }
 }
 
