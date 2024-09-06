@@ -10,9 +10,10 @@ import SwiftUI
 import Talkshoplive
 
 class HomeViewModel: ObservableObject {
-    @Published var showsData: [Talkshoplive.ShowData] = []
+    @Published var showsData: [ShowData] = []
     @Published var isLoading: Bool = false
-    
+    @Published var error: String? = nil // Optional error property
+
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -23,22 +24,23 @@ class HomeViewModel: ObservableObject {
         guard let url = URL(string: "https://staging.cms.talkshop.live/api/s/timeline/v2/events/upcoming?page=1") else { return }
         
         isLoading = true
+        error = nil
         
         URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
-            .decode(type: [ShowData].self, decoder: JSONDecoder())
+            .decode(type: ShowsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
                     self.isLoading = false
                 case .failure(let error):
-                    print("Error fetching data: \(error.localizedDescription)")
+                    self.error = "Error fetching data: \(error.localizedDescription)"
                     self.isLoading = false
                 }
-            }, receiveValue: { shows in
-                self.showsData = shows
-                print("\n Shows",shows )
+            }, receiveValue: { response in
+                self.showsData = response.shows ?? []
+                print("\n Shows fetched successfuly")
             })
             .store(in: &self.cancellables)
     }

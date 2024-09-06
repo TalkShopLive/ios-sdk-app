@@ -7,7 +7,7 @@
 import SwiftUI
 import Talkshoplive
 
-var showID = "8H41J85DaZ-M"
+var showID = "cV_7fYBApZtS"
 var eventID = "8WtAFFgRO1K0"
 struct ShowView: View {
     @State private var timer: Timer?
@@ -266,7 +266,7 @@ struct ShowView: View {
             switch result {
             case .success(let show):
                 // Access properties of TSLShow directly
-                print("\n getDetails => ", show)
+                print("\n getDetails => ", show.trailerUrl)
                 self.showObject = show
                 // dump(show)
             case .failure(let error):
