@@ -10,14 +10,15 @@ import AVKit
 import SwiftUI
 import Talkshoplive
 
-import SwiftUI
-import AVKit
-
 struct PlayerView: View {
     
     @StateObject private var viewModel = PlayerViewModel()
     let showID: String
-    
+    @State private var timer: Timer?
+    @State private var counter: Int = 1
+    @State private var eventObject : Talkshoplive.EventData? = nil
+    let showInstance = Talkshoplive.Show()
+
     var body: some View {
         NavigationStack {
             if viewModel.isLoading {
@@ -27,83 +28,142 @@ struct PlayerView: View {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .padding()
-            } else if let showData = viewModel.showData {
-                VStack(alignment: .leading, spacing: 5) {
+            } else {
+//                Text("No data available")
+//                    .foregroundColor(.gray)
+//                    .padding()
+                
+                if let eventData = viewModel.eventData {
+                    VStack(alignment: .leading, spacing: 5) {
 
-                    // Show Title and Status in HStack
-                    HStack {
-                        Text(showData.name ?? "N/A")
-                            .font(.title)
-                            .fontWeight(.bold)
+                        // Show Title and Status in HStack
+                        HStack {
+                            Text(eventData.name ?? "N/A")
+                                .font(.title)
+                                .fontWeight(.bold)
+                            
+                            Spacer()
+                            
+                            Text(eventData.status ?? "N/A")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.red)
+                        }
+                        .padding([.horizontal, .top])
+
+                        Divider()
+
+                        // HLS URL (Label and Link if available)
+                        if let hlsPlaybackUrl = eventData.hlsPlaybackUrl,
+                           let hlsURL = URL(string: hlsPlaybackUrl) {
+                            VStack(alignment: .leading) {
+                                Text("HLSPlayBack URL:")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                
+                                Link(hlsPlaybackUrl, destination: hlsURL)
+                                    .foregroundColor(.blue)
+                            }
+                            .padding([.horizontal, .bottom])
+                        }
+
+                        // Video Player
+                        if let videoURL = URL(string: eventData.hlsPlaybackUrl ?? "") {
+                            VideoPlayer(player: AVPlayer(url: videoURL))
+                                .frame(height: 350)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                        } else {
+                            Text("Invalid video URL")
+                                .foregroundColor(.red)
+                                .padding(.horizontal)
+                        }
                         
                         Spacer()
-                        
-                        Text(showData.status ?? "N/A")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.red)
                     }
-                    .padding([.horizontal, .top])
+                } else if let showData = viewModel.showData {
+                    VStack(alignment: .leading, spacing: 5) {
 
-                    Divider()
-
-                    // HLS URL (Label and Link if available)
-                    if let hlsPlaybackUrl = showData.hlsPlaybackUrl,
-                       let hlsURL = URL(string: hlsPlaybackUrl) {
-                        VStack(alignment: .leading) {
-                            Text("HLSPlayBack URL:")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                        // Show Title and Status in HStack
+                        HStack {
+                            Text(showData.name ?? "N/A")
+                                .font(.title)
+                                .fontWeight(.bold)
                             
-                            Link(hlsPlaybackUrl, destination: hlsURL)
-                                .foregroundColor(.blue)
+                            Spacer()
+                            
+                            Text(showData.status ?? "N/A")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.red)
                         }
-                        .padding([.horizontal, .bottom])
-                    }
+                        .padding([.horizontal, .top])
 
-                    // Video Player
-                    if let videoURL = URL(string: showData.hlsPlaybackUrl ?? "") {
-                        VideoPlayer(player: AVPlayer(url: videoURL))
-                            .frame(height: 350)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
-                    } else {
-                        Text("Invalid video URL")
-                            .foregroundColor(.red)
-                            .padding(.horizontal)
+                        Divider()
+
+                        // HLS URL (Label and Link if available)
+                        if let hlsPlaybackUrl = showData.hlsPlaybackUrl,
+                           let hlsURL = URL(string: hlsPlaybackUrl) {
+                            VStack(alignment: .leading) {
+                                Text("HLSPlayBack URL:")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                
+                                Link(hlsPlaybackUrl, destination: hlsURL)
+                                    .foregroundColor(.blue)
+                            }
+                            .padding([.horizontal, .bottom])
+                        }
+
+                        // Video Player
+                        if let videoURL = URL(string: showData.hlsPlaybackUrl ?? "") {
+                            VideoPlayer(player: AVPlayer(url: videoURL))
+                                .frame(height: 350)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                        } else {
+                            Text("Invalid video URL")
+                                .foregroundColor(.red)
+                                .padding(.horizontal)
+                        }
+                        
+                        Spacer()
                     }
-                    
-                    Spacer()
                 }
-                .navigationBarTitle("Live Player", displayMode: .inline)
-                .navigationBarItems(trailing:
-                                        Menu {
-                    Button(action: {
-                        // Trigger navigation to ChatView
-                    }) {
-                        Text("Chat")
-                    }
-                    
-                    Button(action: {
-                        // Trigger navigation to ProductsView
-                    }) {
-                        Text("Products")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .imageScale(.large)
-                })
-            } else {
-                Text("No data available")
-                    .foregroundColor(.gray)
-                    .padding()
             }
         }
         .onAppear {
-            viewModel.fetchShowData(showKey: showID)
+            viewModel.fetchShowData(showKey: showID)//fetchCurrentEvent(showKey: showID)
+        }
+        
+        .onDisappear {
+            stopPolling()
         }
     }
+    
+    private func startPolling() {
+        viewModel.fetchCurrentEvent(showKey: showID)
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { timer in
+            pollCurrentEvent()
+        }
+    }
+    private func pollCurrentEvent() {
+        counter = counter + 1
+        viewModel.fetchCurrentEvent(showKey: showID)
+        if viewModel.errorMessage == nil {
+            stopPolling()
+        }
+    }
+    
+    // clear in disappear
+    private func stopPolling() {
+        timer?.invalidate()
+        timer = nil
+        counter = 1
+    }
 }
+
+
 
 
 struct PlayerView_Previews: PreviewProvider {

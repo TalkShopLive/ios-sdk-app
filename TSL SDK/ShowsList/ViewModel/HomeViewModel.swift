@@ -12,12 +12,17 @@ import Talkshoplive
 class HomeViewModel: ObservableObject {
     @Published var showsData: [ShowData] = []
     @Published var isLoading: Bool = false
+    @Published var isSdkInitialized: Bool = false
     @Published var error: String? = nil // Optional error property
 
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        fetchShowsData()
+//        if self.isSdkInitialized {
+//            fetchShowsData()
+//        } else {
+            initializeSDK()
+//        }
     }
     
     func fetchShowsData() {
@@ -40,9 +45,26 @@ class HomeViewModel: ObservableObject {
                 }
             }, receiveValue: { response in
                 self.showsData = response.shows ?? []
+                print(self.showsData.first)
                 print("\n Shows fetched successfuly")
             })
             .store(in: &self.cancellables)
+    }
+    
+    func initializeSDK() {
+        // Assuming SDK initialization is asynchronous
+        let _ = Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3", debugMode: true, testMode: true) { result in
+            switch result {
+            case .success:
+                print("SDK Initialized Successfully")
+                DispatchQueue.main.async {
+                    self.isSdkInitialized = true
+                    self.fetchShowsData()
+                }
+            case .failure(let error):
+                print("SDK Initialization Failed: \(error.localizedDescription)")
+            }
+        }
     }
 }
 

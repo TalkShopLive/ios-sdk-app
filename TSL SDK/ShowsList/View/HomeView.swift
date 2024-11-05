@@ -39,7 +39,7 @@ struct HomeView: View {
                 ScrollView(.vertical, showsIndicators:false) {
                     LazyVGrid(columns: gridLayout, alignment: .center, spacing: 15){
                         ForEach(viewModel.showsData, id: \.id) { item in
-                            NavigationLink(destination: PlayerView(showID: item.showKey ?? "")) {
+                            NavigationLink(destination: PlayerView(showID: item.showKey ?? "rrr")) {
                                 ShowsView(showData: item)
                                     .transition(.asymmetric(insertion: .opacity.combined(with: .scale), removal: .opacity))
                                     .onAppear {
