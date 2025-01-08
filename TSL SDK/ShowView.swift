@@ -8,7 +8,8 @@ import SwiftUI
 import Talkshoplive
 
 var showID = "cV_7fYBApZtS"
-var eventID = "8WtAFFgRO1K0"
+var eventID = "DtzLXq6CGjY-"
+
 struct ShowView: View {
     @State private var timer: Timer?
     @State private var counter: Int = 1
@@ -62,7 +63,7 @@ struct ShowView: View {
                     
                     // Live
                     Button("Live") {
-                        self.showInput = "8WtAFFgRO1K0"
+                        self.showInput = "DtzLXq6CGjY-"
                     }
                     .frame(width: 80)
                     .padding(.vertical, 2)
@@ -112,6 +113,16 @@ struct ShowView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 
+                // Fetch current event
+                Button("Fetch Prelive Products") {
+                    fetchProducts(prelive: true)
+                }
+                .frame(width: 240)
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.blue)
+                .cornerRadius(10)
+                
                 // Start Polling
                 Button(timer == nil ? "Start Polling" : "Stop Polling") {
                     if (timer == nil) {
@@ -147,7 +158,8 @@ struct ShowView: View {
                         Text("channelLogo: \(showObject?.channelLogo ?? "NULL")")
                         Text("channelName: \(showObject?.channelName ?? "NULL")")
                         Text("trailerDuration: \(showObject?.trailerDuration ?? 0)")
-//                        Text("in_show_product_ids: \(showObject?.productsIds ?? [])")
+                        Text("inShowProductIds: \(showObject?.productsIds ?? [])")
+                        Text("preliveShowProductIds: \(showObject?.entranceProductsIds ?? [])")
                         
 
                     }.frame(width: 300).multilineTextAlignment(.leading)
@@ -266,7 +278,7 @@ struct ShowView: View {
             switch result {
             case .success(let show):
                 // Access properties of TSLShow directly
-                print("\n getDetails => ", show.trailerUrl)
+                print("\n getDetails => ", show)
                 self.showObject = show
                 // dump(show)
             case .failure(let error):
@@ -302,12 +314,12 @@ struct ShowView: View {
         }
     }
     
-    func fetchProducts() {
+    func fetchProducts(prelive:Bool = false) {
         self.showResult = ""
         self.showObject = nil
         self.eventObject = nil
         self.products = nil
-        self.showInstance.getProducts(showKey: showInput) { result in
+        self.showInstance.getProducts(showKey: showInput,preLive: prelive) { result in
             switch result {
             case .success(let products):
                 // Access properties of TSLShow directly
