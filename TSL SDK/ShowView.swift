@@ -63,7 +63,7 @@ struct ShowView: View {
                     
                     // Live
                     Button("Live") {
-                        self.showInput = "DtzLXq6CGjY-"
+                        self.showInput = "vzEEXz3MUF3T"
                     }
                     .frame(width: 80)
                     .padding(.vertical, 2)
@@ -130,6 +130,15 @@ struct ShowView: View {
                     } else {
                         stopPolling()
                     }
+                }
+                .frame(width: 240)
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.blue)
+                .cornerRadius(10)
+                
+                Button("Collect - Data") {
+                    collect()
                 }
                 .frame(width: 240)
                 .padding()
@@ -368,6 +377,14 @@ struct ShowView: View {
         timer = nil
         counter = 1
     }
+    
+    func collect() {
+           if let showInstance = showObject {
+               let collectInstance = Collect(show: showInstance, userId: "1234")
+               collectInstance.collect(actionName: .expandProductDetails)
+           }
+   
+       }
 }
 
 struct ShowView_Previews: PreviewProvider {

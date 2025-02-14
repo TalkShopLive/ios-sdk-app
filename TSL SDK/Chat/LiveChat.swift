@@ -9,8 +9,7 @@ import SwiftUI
 import Talkshoplive
 import GiphyUISDK
 
-var defaultShowID = "8WtAFFgRO1K0"
-
+var defaultShowID = "vzEEXz3MUF3T"
 
 //var defultShowID =  "ZKl4cBEzfV_A" // threaded message
 struct LiveChat: View {
