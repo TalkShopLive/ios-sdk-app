@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BFFAC152DE9273100860A64 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFAC142DE9273100860A64 /* Constants.swift */; };
 		67106EAE2C658E6600E4D7E0 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67106EAD2C658E6600E4D7E0 /* HomeViewModel.swift */; };
 		67472D072C0DF64E0062AAE4 /* GiphyUISDK in Frameworks */ = {isa = PBXBuildFile; productRef = 67472D062C0DF64E0062AAE4 /* GiphyUISDK */; };
 		67472D0A2C0DF6670062AAE4 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 67472D092C0DF6670062AAE4 /* Talkshoplive */; };
@@ -56,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1BFFAC142DE9273100860A64 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		67106EAD2C658E6600E4D7E0 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		67472D0B2C0DF9010062AAE4 /* GiphyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphyView.swift; sourceTree = "<group>"; };
 		67472D0F2C0DFA290062AAE4 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 		D17DA7742B5F10FD00ED9BBF /* TSL SDK */ = {
 			isa = PBXGroup;
 			children = (
+				1BFFAC142DE9273100860A64 /* Constants.swift */,
 				679208372C6C0D7400957DE4 /* Products */,
 				67472D0E2C0DFA0F0062AAE4 /* Chat */,
 				674BAFE62BB47A8D004AEA9E /* ShowsList */,
@@ -400,6 +403,7 @@
 				67F737262C5984D100C491FA /* ShowsModel.swift in Sources */,
 				67106EAE2C658E6600E4D7E0 /* HomeViewModel.swift in Sources */,
 				67F737222C59736400C491FA /* ShowsView.swift in Sources */,
+				1BFFAC152DE9273100860A64 /* Constants.swift in Sources */,
 				D1330CDF2B92868300A5FBD2 /* LiveChatView.swift in Sources */,
 				67472D102C0DFA290062AAE4 /* ChatViewModel.swift in Sources */,
 				D1F944AB2B8FDBC2005E5DCE /* InitView.swift in Sources */,
