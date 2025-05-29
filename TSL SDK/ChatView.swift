@@ -103,10 +103,7 @@ struct ChatView: View {
     
     func initializeSDK() {
         // Replace the API URL with your actual API endpoint
-        let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_6c20795f5fae8749b78cbb0e6172e931",debugMode: true,testMode: false) //prod
-
-//        let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3",debugMode: true,testMode: true)
-        print(TSL)
+        let TSL = Talkshoplive.TalkShopLive(clientKey: clientKey,debugMode: true,testMode: false)
     }
     
     func createTokenGuestUser() {
@@ -115,7 +112,7 @@ struct ChatView: View {
         /*
          Payload to generate JWT Token for Guest User :
          {
-         "iss": "sdk_2ea21de19cc8bc5e8640c7b227fef2f3", //SDK Key
+         "iss": "", //SDK Key
          "exp": 1799267746, // Timeinterval from now
          "jti": "tWhBAwSTmXU6zyQK15Euyy==", // Unique Random string
          }
@@ -134,7 +131,7 @@ struct ChatView: View {
         /*
          Payload to generate JWT Token for Fedarated User:
          {
-             "iss": "sdk_2ea21de19cc8bc5e8640c7b227fef2f3", //SDK Key
+             "iss": "", //SDK Key
              "exp": 1799267746, // Timeinterval from now
              "jti": "tWhBAwSTmXU6zyQK15Euyy==", // Unique Random string
              "user": {

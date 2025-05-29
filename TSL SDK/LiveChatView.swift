@@ -77,7 +77,7 @@ struct LiveChatView: View {
     
     func initializeSDK() {
         // Replace the API URL with your actual API endpoint
-        let TSL = Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3",debugMode: true,testMode: true)
+        let TSL = Talkshoplive.TalkShopLive(clientKey: clientKey,debugMode: true,testMode: true)
         print(TSL)
         DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
                 initChat()
