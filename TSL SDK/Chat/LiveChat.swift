@@ -9,7 +9,6 @@ import SwiftUI
 import Talkshoplive
 import GiphyUISDK
 
-var defaultShowID = "vzEEXz3MUF3T"
 
 //var defultShowID =  "ZKl4cBEzfV_A" // threaded message
 struct LiveChat: View {
@@ -194,7 +193,7 @@ struct LiveChat: View {
     
     func initializeSDK() {
         // Assuming SDK initialization is asynchronous
-        Talkshoplive.TalkShopLive(clientKey: "sdk_2ea21de19cc8bc5e8640c7b227fef2f3", debugMode: true, testMode: true) { result in
+        Talkshoplive.TalkShopLive(clientKey: clientKey, debugMode: true, testMode: true) { result in
             switch result {
             case .success:
                 print("SDK Initialized Successfully")

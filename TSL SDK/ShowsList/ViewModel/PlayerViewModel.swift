@@ -14,7 +14,7 @@ class PlayerViewModel: ObservableObject {
     @Published var showData: ShowData?
     @Published var isLoading = false
     @Published var errorMessage: String?
-    let showInstance = Talkshoplive.Show()
+    let showInstance = Talkshoplive.Show.shared
     @State private var eventObject : Talkshoplive.EventData? = nil
     private var cancellables = Set<AnyCancellable>()
     
