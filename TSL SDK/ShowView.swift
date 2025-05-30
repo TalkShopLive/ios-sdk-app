@@ -118,12 +118,13 @@ struct ShowView: View {
             if let show = showObject, show.id != 0, showResult.isEmpty, timer == nil {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Method: show.getDetails()")
-                    Text("id: \(show.id)")
+                    Text("id: \(show.id ?? 0)")
                     Text("showKey: \(show.showKey ?? "")")
                     Text("name: \(show.name ?? "NULL")")
                     Text("description: \(show.showDescription ?? "NULL")")
                     Text("status: \(show.status ?? "NULL")")
                     Text("hlsPlaybackUrl: \(show.hlsPlaybackUrl ?? "NULL")")
+                    Text("hlsUrl: \(show.hlsUrl ?? "NULL")")
                     Text("trailerUrl: \(show.trailerUrl ?? "NULL")")
                     Text("airDate: \(show.airDate ?? "NULL")")
                     Text("eventId: \(show.eventId ?? 0)")
@@ -143,20 +144,18 @@ struct ShowView: View {
     private var eventDetailsSection: some View {
         Group {
             if eventObject != nil || timer != nil {
-                let status = eventObject?.status ?? showObject?.status ?? "created"
+                let status = eventObject?.status ?? "created"
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Method: show.getStatus()")
                     if let event = eventObject {
                         if timer != nil {
                             Text("Counter: \(counter)")
                         }
-                        Text("name: \(showObject?.name ?? "")")
                         Text("status: \(status)")
                         Text("duration: \(event.duration ?? 0)")
                         Text("hlsPlaybackURL: \(event.hlsPlaybackUrl ?? "")")
                         Text("hlsURL: \(event.hlsUrl ?? "NULL")")
                         Text("totalViews: \(event.totalViews ?? 0)")
-
                         if timer != nil {
                             if status == "created" {
                                 Text("Play trailer: \(showObject?.trailerUrl ?? "NULL")")
