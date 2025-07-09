@@ -8,7 +8,7 @@
 import SwiftUI
 import Talkshoplive
 
-let defaultShowID = "8H41J85DaZ-M"
+let defaultShowID = "Zv4uczy8jmpi"
 
 struct ShowView: View {
     // MARK: - State Properties
@@ -126,6 +126,7 @@ struct ShowView: View {
                     Text("hlsPlaybackUrl: \(show.hlsPlaybackUrl ?? "NULL")")
                     Text("hlsUrl: \(show.hlsUrl ?? "NULL")")
                     Text("trailerUrl: \(show.trailerUrl ?? "NULL")")
+                    Text("CC: \(show.cc ?? "NULL")")
                     Text("airDate: \(show.airDate ?? "NULL")")
                     Text("eventId: \(show.eventId ?? 0)")
                     Text("duration: \(show.duration ?? 0)")
@@ -265,7 +266,7 @@ struct ShowView: View {
     private func collect() {
         if let event = eventObject {
             let collector = Collect(event: event, userId: "1234")
-            collector.collect(actionName: .selectProduct)
+            collector.collect(actionName: .videoPlay,videoTime: 10)
         }
     }
 
