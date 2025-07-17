@@ -8,7 +8,7 @@
 import SwiftUI
 import Talkshoplive
 
-let defaultShowID = "Zv4uczy8jmpi"
+let defaultShowID = "22Nlc9y9kUih"
 
 struct ShowView: View {
     // MARK: - State Properties
@@ -101,6 +101,7 @@ struct ShowView: View {
                 timer == nil ? startPolling() : stopPolling()
             }
             actionButton("Collect - Data", action: collect)
+            actionButton("Collect - Product Data", action: collectProductData)
         }
     }
 
@@ -197,21 +198,54 @@ struct ShowView: View {
     struct ProductItemView: View {
         let product: ProductData
         let index: Int
-        
+
         var body: some View {
             VStack(alignment: .leading, spacing: 6) {
-                Text("----- Product \(index + 1) -----")
-                Text("ID: \(product.id ?? 0)")
-                Text("SKU: \(product.sku ?? "NULL")")
-                Text("Description: \(product.description ?? "NULL")")
-                Text("Image URL: \(product.image ?? "NULL")")
-                Text("Product Source: \(product.source ?? "NULL")")
-                Text("Affiliate Link: \(product.affiliateLink ?? "NULL")")
+                basicInfoSection
+                variantSection
             }
             .padding()
             .background(Color.gray.opacity(0.05))
             .cornerRadius(6)
         }
+
+        private var basicInfoSection: some View {
+            Group {
+                Text("----- Product \(index + 1) -----")
+                Text("ID: \(product.id ?? 0)")
+                Text("SKU: \(product.sku ?? "NULL")")
+                Text("ProductKey: \(product.productKey ?? "NULL")")
+                Text("Description: \(product.description ?? "NULL")")
+                Text("Image URL: \(product.image ?? "NULL")")
+                Text("Product Source: \(product.source ?? "NULL")")
+                Text("Affiliate Link: \(product.affiliateLink ?? "NULL")")
+                Text("HasVariants: \(product.hasVariants ? "true" : "false")")
+                Text("VariantId: \(product.variantId?.description ?? "NULL")")
+            }
+        }
+
+        @ViewBuilder
+        private var variantSection: some View {
+            if product.hasVariants, let variants = product.variants {
+                let validVariants = variants.compactMap { $0.id != nil ? $0 : nil } // filter out variants with nil id
+                
+                if validVariants.isEmpty {
+                    Text("No valid variants with ID")
+                } else {
+                    Text("Variants:")
+                        .fontWeight(.bold)
+                    ForEach(validVariants, id: \.id!) { variant in
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("• Variant ID: \(variant.id!)")
+                            Text("  Display Price: \(variant.displayPrice ?? "N/A")")
+                            Text("  Name: \(variant.exchangeName ?? "N/A")")
+                        }
+                        .padding(.leading, 8)
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -267,6 +301,13 @@ struct ShowView: View {
         if let event = eventObject {
             let collector = Collect(event: event, userId: "1234")
             collector.collect(actionName: .videoPlay,videoTime: 10)
+        }
+    }
+    
+    private func collectProductData() {
+        if let event = eventObject, (self.products?.count ?? 0) > 0 {
+            let collector = Collect(event: event, userId: "1234")
+            collector.collect(actionName: .selectProduct,videoTime: 10,variantId: 7865,productKey: "JEg2ru-zbO1U")
         }
     }
 

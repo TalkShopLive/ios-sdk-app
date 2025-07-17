@@ -1,12 +1,31 @@
 {
+  "originHash" : "358e24b112b0cbf1246dec28dd7917e405bed682eb34751034932a83d6e9ec61",
   "pins" : [
+    {
+      "identity" : "giphy-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Giphy/giphy-ios-sdk",
+      "state" : {
+        "revision" : "9a3970c258ef5cc005f9359ba4c6a344fe062abe",
+        "version" : "2.2.15"
+      }
+    },
     {
       "identity" : "ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TalkShopLive/ios-sdk",
       "state" : {
-        "branch" : "main",
-        "revision" : "819bb4073176a345a40c2b0c6302895a7372ec7d"
+        "branch" : "development",
+        "revision" : "7e1dfe3b314396aa736a23943a77c50589c97333"
+      }
+    },
+    {
+      "identity" : "libwebp-xcode",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/libwebp-Xcode",
+      "state" : {
+        "revision" : "0d60654eeefd5d7d2bef3835804892c40225e8b2",
+        "version" : "1.5.0"
       }
     },
     {
@@ -14,10 +33,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pubnub/swift.git",
       "state" : {
-        "revision" : "c58d58e3761010289d395ab2530cb19f38255108",
-        "version" : "7.1.0"
+        "revision" : "d1f82968fa88caff521c6b623fe69b28444761cc",
+        "version" : "8.3.1"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
