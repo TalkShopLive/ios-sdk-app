@@ -300,6 +300,7 @@ struct ShowView: View {
     private func collect() {
         if let event = eventObject {
             let collector = Collect(event: event, userId: "1234")
+            //Player actions
             collector.collect(actionName: .videoPlay,videoTime: 10)
         }
     }
@@ -307,7 +308,12 @@ struct ShowView: View {
     private func collectProductData() {
         if let event = eventObject, (self.products?.count ?? 0) > 0 {
             let collector = Collect(event: event, userId: "1234")
-            collector.collect(actionName: .selectProduct,videoTime: 10,variantId: 7865,productKey: "JEg2ru-zbO1U")
+            //Product with variantId
+            collector.collect(actionName: .selectProduct,videoTime: 5,variantId: 7865, productKey: "JEg2ru-zbO1U", productId: 2783)
+
+            
+            //AddtoCart action should pass product meta data everytime
+            collector.collect(actionName: .addToCart,videoTime: 10,variantId: 7873, productKey: "MqScBJ1Y0uLN", productId: 2785)
         }
     }
 
