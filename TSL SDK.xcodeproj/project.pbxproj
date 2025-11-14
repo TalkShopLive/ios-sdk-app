@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B28836F2EC7A106008CFFF1 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 1B28836E2EC7A106008CFFF1 /* Talkshoplive */; };
+		1B737FAA2EABEA5A008B92E2 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 1B737FA92EABEA5A008B92E2 /* Talkshoplive */; };
+		1B737FAC2EABEFA5008B92E2 /* ShoppettesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B737FAB2EABEFA5008B92E2 /* ShoppettesView.swift */; };
 		1B82F7D12DE9FBDF0092CEF0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B82F7D02DE9FBDF0092CEF0 /* Constants.swift */; };
 		67106EAE2C658E6600E4D7E0 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67106EAD2C658E6600E4D7E0 /* HomeViewModel.swift */; };
 		67472D072C0DF64E0062AAE4 /* GiphyUISDK in Frameworks */ = {isa = PBXBuildFile; productRef = 67472D062C0DF64E0062AAE4 /* GiphyUISDK */; };
@@ -18,7 +21,6 @@
 		674BAFE82BB47A9B004AEA9E /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674BAFE72BB47A9B004AEA9E /* PlayerView.swift */; };
 		675F39A42BE2F3AD00A0DA1D /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 675F39A32BE2F3AD00A0DA1D /* Talkshoplive */; };
 		679208392C6C0D9300957DE4 /* ProductsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679208382C6C0D9300957DE4 /* ProductsView.swift */; };
-		67CA8AA12C36287B0055C55E /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 67CA8AA02C36287B0055C55E /* Talkshoplive */; };
 		67E246142C8291F30001495B /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E246132C8291F30001495B /* PlayerViewModel.swift */; };
 		67EB7B3D2BEEB07200B059E9 /* Talkshoplive in Frameworks */ = {isa = PBXBuildFile; productRef = 67EB7B3C2BEEB07200B059E9 /* Talkshoplive */; };
 		67F737222C59736400C491FA /* ShowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F737212C59736400C491FA /* ShowsView.swift */; };
@@ -57,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1B737FAB2EABEFA5008B92E2 /* ShoppettesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppettesView.swift; sourceTree = "<group>"; };
 		1B82F7D02DE9FBDF0092CEF0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		67106EAD2C658E6600E4D7E0 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		67472D0B2C0DF9010062AAE4 /* GiphyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphyView.swift; sourceTree = "<group>"; };
@@ -92,10 +95,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67CA8AA12C36287B0055C55E /* Talkshoplive in Frameworks */,
+				1B737FAA2EABEA5A008B92E2 /* Talkshoplive in Frameworks */,
 				67472D072C0DF64E0062AAE4 /* GiphyUISDK in Frameworks */,
 				67EB7B3D2BEEB07200B059E9 /* Talkshoplive in Frameworks */,
 				67472D0A2C0DF6670062AAE4 /* Talkshoplive in Frameworks */,
+				1B28836F2EC7A106008CFFF1 /* Talkshoplive in Frameworks */,
 				675F39A42BE2F3AD00A0DA1D /* Talkshoplive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,6 +222,7 @@
 				D1F944AA2B8FDBC2005E5DCE /* InitView.swift */,
 				D1330CDE2B92868300A5FBD2 /* LiveChatView.swift */,
 				1B82F7D02DE9FBDF0092CEF0 /* Constants.swift */,
+				1B737FAB2EABEFA5008B92E2 /* ShoppettesView.swift */,
 			);
 			path = "TSL SDK";
 			sourceTree = "<group>";
@@ -268,7 +273,8 @@
 				67EB7B3C2BEEB07200B059E9 /* Talkshoplive */,
 				67472D062C0DF64E0062AAE4 /* GiphyUISDK */,
 				67472D092C0DF6670062AAE4 /* Talkshoplive */,
-				67CA8AA02C36287B0055C55E /* Talkshoplive */,
+				1B737FA92EABEA5A008B92E2 /* Talkshoplive */,
+				1B28836E2EC7A106008CFFF1 /* Talkshoplive */,
 			);
 			productName = "TSL SDK";
 			productReference = D17DA7722B5F10FD00ED9BBF /* TSL SDK.app */;
@@ -344,7 +350,7 @@
 			mainGroup = D17DA7692B5F10FD00ED9BBF;
 			packageReferences = (
 				67472D052C0DF64E0062AAE4 /* XCRemoteSwiftPackageReference "giphy-ios-sdk" */,
-				67CA8A9F2C36287B0055C55E /* XCRemoteSwiftPackageReference "ios-sdk" */,
+				1B28836D2EC7A106008CFFF1 /* XCLocalSwiftPackageReference "../../../iOS-SDK/ios-sdk" */,
 			);
 			productRefGroup = D17DA7732B5F10FD00ED9BBF /* Products */;
 			projectDirPath = "";
@@ -405,6 +411,7 @@
 				67F737222C59736400C491FA /* ShowsView.swift in Sources */,
 				1B82F7D12DE9FBDF0092CEF0 /* Constants.swift in Sources */,
 				D1330CDF2B92868300A5FBD2 /* LiveChatView.swift in Sources */,
+				1B737FAC2EABEFA5008B92E2 /* ShoppettesView.swift in Sources */,
 				67472D102C0DFA290062AAE4 /* ChatViewModel.swift in Sources */,
 				D1F944AB2B8FDBC2005E5DCE /* InitView.swift in Sources */,
 				D17DA7762B5F10FD00ED9BBF /* TSL_SDKApp.swift in Sources */,
@@ -760,6 +767,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		1B28836D2EC7A106008CFFF1 /* XCLocalSwiftPackageReference "../../../iOS-SDK/ios-sdk" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../../iOS-SDK/ios-sdk";
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		67472D052C0DF64E0062AAE4 /* XCRemoteSwiftPackageReference "giphy-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -769,17 +783,17 @@
 				minimumVersion = 2.2.9;
 			};
 		};
-		67CA8A9F2C36287B0055C55E /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
-			requirement = {
-				branch = development;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1B28836E2EC7A106008CFFF1 /* Talkshoplive */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Talkshoplive;
+		};
+		1B737FA92EABEA5A008B92E2 /* Talkshoplive */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Talkshoplive;
+		};
 		67472D062C0DF64E0062AAE4 /* GiphyUISDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 67472D052C0DF64E0062AAE4 /* XCRemoteSwiftPackageReference "giphy-ios-sdk" */;
@@ -791,11 +805,6 @@
 		};
 		675F39A32BE2F3AD00A0DA1D /* Talkshoplive */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Talkshoplive;
-		};
-		67CA8AA02C36287B0055C55E /* Talkshoplive */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 67CA8A9F2C36287B0055C55E /* XCRemoteSwiftPackageReference "ios-sdk" */;
 			productName = Talkshoplive;
 		};
 		67EB7B3C2BEEB07200B059E9 /* Talkshoplive */ = {

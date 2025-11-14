@@ -157,7 +157,7 @@ struct ShowView: View {
                         Text("duration: \(event.duration ?? 0)")
                         Text("hlsPlaybackURL: \(event.hlsPlaybackUrl ?? "")")
                         Text("hlsURL: \(event.hlsUrl ?? "NULL")")
-                        Text("totalViews: \(event.totalViews ?? 0)")
+//                        Text("totalViews: \(event.totalViews ?? 0)")
                         if timer != nil {
                             if status == "created" {
                                 Text("Play trailer: \(showObject?.trailerUrl ?? "NULL")")
@@ -301,7 +301,20 @@ struct ShowView: View {
         if let event = eventObject {
             let collector = Collect(event: event, userId: "1234")
             //Player actions
-            collector.collect(actionName: .videoPlay,videoTime: 10)
+//            collector.collect(actionName: .videoView,videoTime: 3)
+//            collector.collect(actionName: .videoPlay,videoTime: 10)
+//            collector.collect(actionName: .videoTime,videoTime: 20)
+//            collector.collect(actionName: .videoTime,videoTime: 30)
+//            collector.collect(actionName: .videoTime,videoTime: 40)
+//            collector.collect(actionName: .videoTime,videoTime: 50)
+//            collector.collect(actionName: .videoTime,videoTime: 60)
+//            collector.collect(actionName: .videoTime,videoTime: 70)
+//            collector.collect(actionName: .videoTime,videoTime: 80)
+//            collector.collect(actionName: .videoTime,videoTime: 90)
+            collector.collect(actionName: .videoComplete,videoTime: 95)
+            
+//            collector.collect(actionName: .addToCart, videoTime: 30, variantId: 123, productKey: "dfgdfg", productId: 89)
+
         }
     }
     
