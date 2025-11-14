@@ -21,7 +21,7 @@ class HomeViewModel: ObservableObject {
     }
     
     func fetchShowsData() {
-        guard let url = URL(string: "https://staging.cms.talkshop.live/api/s/timeline/v2/events/upcoming?page=1") else { return }
+        guard let url = URL(string: "https://stg.cms.talkshop.live/api/s/timeline/v2/events/upcoming?page=1") else { return }
         
         isLoading = true
         error = nil

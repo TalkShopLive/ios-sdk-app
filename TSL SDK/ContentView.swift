@@ -25,8 +25,21 @@ struct ContentView: View {
                 .navigationTitle("SDK View")
                 
                 // Show Class Implementation
+                NavigationLink(destination: ShoppettesView()) {
+                    Text("Shoppettes")
+                        .buttonStyle(.borderedProminent)
+                        .frame(width: 240)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .navigationTitle("SDK View")
+                
+                // Show Class Implementation
                 NavigationLink(destination: ShowView()) {
-                    Text("Show View")
+                    Text("Shows")
                         .buttonStyle(.borderedProminent)
                         .frame(width: 240)
                         .padding(.vertical, 8)
@@ -39,7 +52,7 @@ struct ContentView: View {
                 
                 // Chat Class Implementation
                 NavigationLink(destination: ChatView()) {
-                    Text("Chat View")
+                    Text("Chats")
                         .buttonStyle(.borderedProminent)
                         .frame(width: 240)
                         .padding(.vertical, 8)
@@ -70,7 +83,7 @@ struct ContentView: View {
                         .frame(width: 240)
                         .padding(.vertical, 8)
                         .padding(.horizontal, 4)
-                        .background(Color.yellow)
+                        .background(Color.gray)
                         .foregroundColor(.black)
                         .cornerRadius(8)
                 }
@@ -83,7 +96,7 @@ struct ContentView: View {
                         .frame(width: 240)
                         .padding(.vertical, 8)
                         .padding(.horizontal, 4)
-                        .background(Color.orange)
+                        .background(Color.gray)
                         .foregroundColor(.black)
                         .cornerRadius(8)
                 }
