@@ -8,8 +8,6 @@
 import SwiftUI
 import Talkshoplive
 
-let defaultShowID = "22Nlc9y9kUih"
-
 struct ShowView: View {
     // MARK: - State Properties
     @State private var timer: Timer?

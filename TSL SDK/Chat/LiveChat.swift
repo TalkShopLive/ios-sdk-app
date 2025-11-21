@@ -10,7 +10,7 @@ import Talkshoplive
 import GiphyUISDK
 
 
-var defultShowID =  "KsqM-Z5Z8eim" // threaded message
+
 struct LiveChat: View {
     @State private var refreshCount = 0 // Counter to track refreshes
 
