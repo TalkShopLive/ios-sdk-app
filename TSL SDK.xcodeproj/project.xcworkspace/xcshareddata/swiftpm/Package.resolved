@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Giphy/giphy-ios-sdk",
       "state" : {
-        "revision" : "9a3970c258ef5cc005f9359ba4c6a344fe062abe",
-        "version" : "2.2.15"
+        "revision" : "3ba672878445c53c8cb87d57c3ae5cc1f3166b5b",
+        "version" : "2.3.2"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TalkShopLive/ios-sdk",
       "state" : {
-        "branch" : "development",
-        "revision" : "041a8e3271a7568df17b41d0ce881578af3994de"
+        "branch" : "pubnub-xcode26-fix",
+        "revision" : "9c96c395fd0ba472a2d8d1e72744310fa2506d71"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pubnub/swift.git",
       "state" : {
-        "revision" : "0639f7c76bbf7e92e78f39717a078d04e60f492e",
-        "version" : "9.3.5"
+        "revision" : "ff529423b2480413d8006cd2ced9bc65aa3e583e",
+        "version" : "10.1.5"
       }
     }
   ],

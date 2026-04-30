@@ -787,7 +787,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
 			requirement = {
-				branch = development;
+				branch = "pubnub-xcode26-fix";
 				kind = branch;
 			};
 		};
