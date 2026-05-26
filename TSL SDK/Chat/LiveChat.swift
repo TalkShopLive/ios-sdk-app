@@ -303,10 +303,9 @@ struct LiveChat: View {
            
             self.chat?.deleteMessage(timeToken: timetoken, completion: { status, error in
                 if status {
-//                    self.messages.remove(at: index)
-                    print("APP : Message deleted Successfully", status)
+                    print("APP : Message deleted Successfully")
                 } else {
-//                    print("APP : Error", error?.localizedDescription)
+                    print("APP : deleteMessage error —", error?.localizedDescription ?? "unknown")
                 }
             })
         }

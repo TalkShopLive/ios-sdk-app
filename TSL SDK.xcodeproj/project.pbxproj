@@ -787,7 +787,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TalkShopLive/ios-sdk";
 			requirement = {
-				branch = development;
+				branch = "hotfix/walmart-critical-4.1.1";
 				kind = branch;
 			};
 		};

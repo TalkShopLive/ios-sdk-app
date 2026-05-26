@@ -40,11 +40,9 @@ class ChatViewModel: ObservableObject, ChatDelegate {
             print("APP : Original message details", originalMessage.text ?? "")
         }
         
-        //Get GiphyId
         if message.payload?.type == .giphy {
-            print("Giphy Id", message.payload?.text)
+            print("APP : Giphy Id", message.payload?.text ?? "nil")
         }
-        print("GiphyId")
         dump(message)
     }
     
