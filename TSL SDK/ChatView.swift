@@ -102,8 +102,14 @@ struct ChatView: View {
     }
     
     func initializeSDK() {
-        // Replace the API URL with your actual API endpoint
-        let TSL = Talkshoplive.TalkShopLive(clientKey: clientKey,debugMode: true,testMode: false)
+        Talkshoplive.TalkShopLive(clientKey: clientKey, debugMode: true, testMode: false) { result in
+            switch result {
+            case .success:
+                print("APP [ChatView] : SDK Initialized")
+            case .failure(let error):
+                print("APP [ChatView] : SDK init failed —", error.localizedDescription)
+            }
+        }
     }
     
     func createTokenGuestUser() {
